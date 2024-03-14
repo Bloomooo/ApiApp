@@ -30,8 +30,9 @@ public class ConnexionAPI {
 
     private ConnexionAPI() {
         this.httpURLConnection = null;
-        CLIENT_ID = "9e6d20d3be7307e202a88d5e1b131840";
-        URL_GETANIME = "https://api.myanimelist.net/v2/users/Seele_/animelist?fields=list_status&limit=1000";
+        Dotenv dotenv = Dotenv.load();
+        CLIENT_ID = dotenv.get("CLIENT_ID");
+        URL_GETANIME = dotenv.get("URL_GETANIME");
     }
 
     public static synchronized ConnexionAPI getInstance() {
@@ -77,7 +78,6 @@ public class ConnexionAPI {
                             String status = listStatus.getString("status");
                             int score = listStatus.getInt("score");
                             String imageUri = image.getString("medium");
-                            Log.i("ggez", imageUri);
                             int epWatch = listStatus.getInt("num_episodes_watched");
 
                             Anime animeEntity = new Anime(i, title, imageUri, score, status, epWatch);
