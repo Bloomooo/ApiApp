@@ -3,7 +3,7 @@ public class Anime {
 
     private int id;
 
-    private String titre;
+    private String title;
 
     private String imageUri;
 
@@ -11,19 +11,22 @@ public class Anime {
 
     private String status;
 
-    public Anime(int id, String titre, String imageUri, int score, String status){
+    private int epWatch;
+
+    public Anime(int id, String title, String imageUri, int score, String status, int epWatch){
         this.id = id;
-        this.titre = titre;
+        this.title = title;
         this.imageUri = imageUri;
         this.score = score;
         this.status = status;
+        this.epWatch = epWatch;
     }
     public int getId(){
         return id;
     }
 
-    public String getTitre(){
-        return titre;
+    public String getTitle(){
+        return title;
     }
 
     public String getImageUri(){
@@ -37,8 +40,12 @@ public class Anime {
     public String getStatus(){
         return status;
     }
+
+    public int getEpWatch(){
+        return epWatch;
+    }
     @Override
     public String toString(){
-        return " id : "+ this.id + " titre : "+ this.titre +" imageUri : "+ this.imageUri +" score : "+ this.score +" status : "+ this.status;
+        return " id : "+ this.id + " titre : "+ this.title +" imageUri : "+ this.imageUri +" score : "+ this.score +" status : "+ this.status;
     }
 }
