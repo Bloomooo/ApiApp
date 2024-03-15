@@ -2,6 +2,7 @@ package com.api.projet;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,9 +47,14 @@ public class SignUpMain extends AppCompatActivity {
             public void onClick(View v) {
                 String email = emailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
-                createUser(email, password);
-                Intent mainIntent = new Intent(SignUpMain.this, MainActivity.class);
-                startActivity(mainIntent);
+                if(isValidEmail(email)){
+                    createUser(email, password);
+                    Intent mainIntent = new Intent(SignUpMain.this, MainActivity.class);
+                    startActivity(mainIntent);
+                }else{
+                    Toast.makeText(SignUpMain.this, "Invalid format email !", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }
@@ -68,5 +74,8 @@ public class SignUpMain extends AppCompatActivity {
                         }
                     }
                 });
+    }
+    private boolean isValidEmail(CharSequence target) {
+        return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 }
