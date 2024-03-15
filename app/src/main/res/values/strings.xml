@@ -1,13 +1,13 @@
 <resources>
-    <string name="app_name">yanis-enzo-projet-api</string>
+    <string name="app_name">Project Anime List</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
+    <string name="nav_header_title">P.A.L</string>
+    <string name="nav_header_subtitle">subtitle</string>
+    <string name="nav_header_desc">desc</string>
     <string name="action_settings">Settings</string>
 
     <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
+    <string name="menu_mylist">Ma Liste</string>
     <string name="menu_slideshow">Slideshow</string>
 </resources>

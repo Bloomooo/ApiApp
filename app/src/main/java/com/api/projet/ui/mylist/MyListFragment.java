@@ -1,4 +1,4 @@
-package com.api.projet.ui.gallery;
+package com.api.projet.ui.mylist;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,22 +10,20 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.api.projet.databinding.FragmentGalleryBinding;
+import com.api.projet.databinding.FragmentMylistBinding;
 
-public class GalleryFragment extends Fragment {
+public class MyListFragment extends Fragment {
 
-    private FragmentGalleryBinding binding;
+    private FragmentMylistBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        GalleryViewModel galleryViewModel =
-                new ViewModelProvider(this).get(GalleryViewModel.class);
+        MyListViewModel myListViewModel =
+                new ViewModelProvider(this).get(MyListViewModel.class);
 
-        binding = FragmentGalleryBinding.inflate(inflater, container, false);
+        binding = FragmentMylistBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textGallery;
-        galleryViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 
