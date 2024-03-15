@@ -3,6 +3,9 @@ package com.api.projet.backend;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.api.projet.entity.Anime;
+import com.api.projet.inter.ListCallBackInterface;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,33 +16,46 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class ConnexionAPI {
-
+    private static ConnexionAPI instance;
     private HttpURLConnection httpURLConnection;
-    public ConnexionAPI(){
+
+    private String CLIENT_ID;
+    private String URL_GETANIME;
+
+    private ConnexionAPI() {
         this.httpURLConnection = null;
+        Dotenv dotenv = Dotenv.load();
+        CLIENT_ID = dotenv.get("CLIENT_ID");
+        URL_GETANIME = dotenv.get("URL_GETANIME");
     }
-    public void getListAnime() {
-        AsyncTask<Void, Void, Integer> apiTask = new AsyncTask<Void, Void, Integer>() {
+
+    public static synchronized ConnexionAPI getInstance() {
+        if (instance == null) {
+            instance = new ConnexionAPI();
+        }
+        return instance;
+    }
+
+    public void getListAnime(ListCallBackInterface callback) {
+        AsyncTask<Void, Void, List<Anime>> apiTask = new AsyncTask<Void, Void, List<Anime>>() {
             @Override
-            protected Integer doInBackground(Void... voids) {
+            protected List<Anime> doInBackground(Void... voids) {
+                List<Anime> animeList = new ArrayList<>();
                 try {
-                    Dotenv dotenv = Dotenv.configure().filename(".env").load();
-
-                    String CLIENT_ID = dotenv.get("CLIENT_ID");
-                    String URL_GETANIME = dotenv.get("URL_GETANIME");
-
                     URL url = new URL(URL_GETANIME);
                     httpURLConnection = (HttpURLConnection) url.openConnection();
 
-                    httpURLConnection.setRequestProperty("X-MAL-CLIENT-ID",CLIENT_ID);
-
+                    httpURLConnection.setRequestProperty("X-MAL-CLIENT-ID", CLIENT_ID);
                     httpURLConnection.setRequestMethod("GET");
                     int responseCode = httpURLConnection.getResponseCode();
                     Log.i("ggez", String.valueOf(responseCode));
+
                     if (responseCode == HttpURLConnection.HTTP_OK) {
                         InputStream inputStream = httpURLConnection.getInputStream();
                         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
@@ -57,25 +73,32 @@ public class ConnexionAPI {
                             JSONObject anime = dataArray.getJSONObject(i);
                             JSONObject node = anime.getJSONObject("node");
                             JSONObject listStatus = anime.getJSONObject("list_status");
-
+                            JSONObject image = node.getJSONObject("main_picture");
                             String title = node.getString("title");
                             String status = listStatus.getString("status");
                             int score = listStatus.getInt("score");
-                            int numEpisodesWatched = listStatus.getInt("num_episodes_watched");
+                            String imageUri = image.getString("medium");
+                            int epWatch = listStatus.getInt("num_episodes_watched");
 
-                            Log.i("Anime Info", "Title: " + title + ", Status: " + status + ", Score: " + score + ", Episodes Watched: " + numEpisodesWatched);
+                            Anime animeEntity = new Anime(i, title, imageUri, score, status, epWatch);
+                            animeList.add(animeEntity);
                         }
-                        return 0;
-                    } else {
-                        return responseCode;
                     }
-
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
-                    return HttpURLConnection.HTTP_BAD_REQUEST;
+                } finally {
+                    if (httpURLConnection != null) {
+                        httpURLConnection.disconnect();
+                    }
                 }
+                return animeList;
             }
 
+            @Override
+            protected void onPostExecute(List<Anime> result) {
+                super.onPostExecute(result);
+                callback.onSuccess(result);
+            }
         };
 
         apiTask.execute();

@@ -17,3 +17,4 @@ gradle-app.setting
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 app/src/main/java/.env
+app/src/main/java/com/api/projet/.env.local
