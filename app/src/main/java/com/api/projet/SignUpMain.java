@@ -16,67 +16,55 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class LoginMain extends AppCompatActivity {
+public class SignUpMain extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private EditText emailEditText;
 
     private EditText passwordEditText;
 
-    private Button loginButton;
-
     private Button signUpButton;
 
     @Override
     public void onCreate(Bundle bundle){
         super.onCreate(bundle);
-        setContentView(R.layout.login_activity);
+        setContentView(R.layout.signup_activity);
         initComponent();
-        initListener(loginButton, signUpButton);
+        initListener(signUpButton);
     }
 
     private void initComponent(){
         this.mAuth = FirebaseAuth.getInstance();
-        this.emailEditText = findViewById(R.id.emailLogin);
-        this.passwordEditText = findViewById(R.id.passwordLogin);
-        this.loginButton = findViewById(R.id.loginButton);
-        this.signUpButton = findViewById(R.id.signupLoginButton);
+        this.emailEditText = findViewById(R.id.emailSignUp);
+        this.passwordEditText = findViewById(R.id.passwordSignUp);
+        this.signUpButton = findViewById(R.id.signupButton);
     }
 
-    private void initListener(Button loginButton, Button signUpButton){
-        loginButton.setOnClickListener(new View.OnClickListener() {
+    private void initListener(Button signUpButton){
+        signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String email = emailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
-                signIn(email, password);
-            }
-        });
-
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent signUpIntent = new Intent(LoginMain.this, SignUpMain.class);
-                startActivity(signUpIntent);
+                createUser(email, password);
             }
         });
     }
 
-    private void signIn(String email, String password){
-        mAuth.signInWithEmailAndPassword(email, password)
+    private void createUser(String email, String password){
+        mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(LoginMain.this, "Authentication successful.",
+                            Toast.makeText(SignUpMain.this, "Authentication successful.",
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(LoginMain.this, "Authentication failed.",
+                            Toast.makeText(SignUpMain.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
-
 }
