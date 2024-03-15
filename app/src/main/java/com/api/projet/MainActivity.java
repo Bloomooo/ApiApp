@@ -7,9 +7,12 @@ import android.view.View;
 import android.view.Menu;
 
 import com.api.projet.backend.ConnexionAPI;
+import com.api.projet.ui.connexion.ConnexionViewModel;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -66,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        ConnexionViewModel conn = new ViewModelProvider(this).get(ConnexionViewModel.class);
+        conn.control("Ifourty");
     }
 
     @Override
