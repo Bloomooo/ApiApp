@@ -49,8 +49,6 @@ public class SignUpMain extends AppCompatActivity {
                 String password = passwordEditText.getText().toString();
                 if(isValidEmail(email)){
                     createUser(email, password);
-                    Intent mainIntent = new Intent(SignUpMain.this, MainActivity.class);
-                    startActivity(mainIntent);
                 }else{
                     Toast.makeText(SignUpMain.this, "Invalid format email !", Toast.LENGTH_SHORT).show();
                 }
@@ -68,6 +66,8 @@ public class SignUpMain extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(SignUpMain.this, "Authentication successful.",
                                     Toast.LENGTH_SHORT).show();
+                            Intent mainIntent = new Intent(SignUpMain.this, MainActivity.class);
+                            startActivity(mainIntent);
                         } else {
                             Toast.makeText(SignUpMain.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();

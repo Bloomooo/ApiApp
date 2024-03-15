@@ -27,7 +27,6 @@ public class LoginMain extends AppCompatActivity {
     private Button loginButton;
 
     private Button signUpButton;
-
     @Override
     public void onCreate(Bundle bundle){
         super.onCreate(bundle);
@@ -52,8 +51,6 @@ public class LoginMain extends AppCompatActivity {
                 String password = passwordEditText.getText().toString();
                 if(isValidEmail(email)){
                     signIn(email, password);
-                    Intent mainIntent = new Intent(LoginMain.this, MainActivity.class);
-                    startActivity(mainIntent);
                 }else{
                     Toast.makeText(LoginMain.this, "Invalid format email !", Toast.LENGTH_SHORT).show();
                 }
@@ -79,6 +76,8 @@ public class LoginMain extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(LoginMain.this, "Authentication successful.",
                                     Toast.LENGTH_SHORT).show();
+                            Intent mainIntent = new Intent(LoginMain.this, MainActivity.class);
+                            startActivity(mainIntent);
                         } else {
                             Toast.makeText(LoginMain.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
