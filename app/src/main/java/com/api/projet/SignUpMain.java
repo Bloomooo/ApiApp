@@ -47,6 +47,8 @@ public class SignUpMain extends AppCompatActivity {
                 String email = emailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
                 createUser(email, password);
+                Intent mainIntent = new Intent(SignUpMain.this, MainActivity.class);
+                startActivity(mainIntent);
             }
         });
     }

@@ -50,6 +50,8 @@ public class LoginMain extends AppCompatActivity {
                 String email = emailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
                 signIn(email, password);
+                Intent mainIntent = new Intent(LoginMain.this, MainActivity.class);
+                startActivity(mainIntent);
             }
         });
 
