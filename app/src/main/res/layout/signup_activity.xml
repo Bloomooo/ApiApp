@@ -47,13 +47,11 @@
 
         <Button
             android:id="@+id/signupButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sign up"
-            android:textColor="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/emailPasswordContainer"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            android:text="Sign Up"
+            android:textColor="@color/white"
+            android:layout_marginTop="16dp"/>
     </LinearLayout>
 
 
