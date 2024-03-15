@@ -7,7 +7,7 @@
     android:background="@color/white">
 
     <ImageView
-        android:id="@+id/logoLogin"
+        android:id="@+id/logoSignUp"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:src="@drawable/ic_icon_nobg"
@@ -22,13 +22,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/logoImageView"
+        app:layout_constraintTop_toBottomOf="@id/logoSignUp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="24dp">
 
         <EditText
-            android:id="@+id/emailLogin"
+            android:id="@+id/emailSignUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email"
@@ -37,7 +37,7 @@
             android:imeOptions="actionNext"/>
 
         <EditText
-            android:id="@+id/passwordLogin"
+            android:id="@+id/passwordSignUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password"
@@ -46,14 +46,7 @@
             android:imeOptions="actionDone"/>
 
         <Button
-            android:id="@+id/loginButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Login"
-            android:textColor="@color/white"
-            android:layout_marginTop="16dp"/>
-        <Button
-            android:id="@+id/signupLoginButton"
+            android:id="@+id/signupButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sign up"
