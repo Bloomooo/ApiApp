@@ -83,6 +83,8 @@ public class ConnexionViewModel extends ViewModel implements ListCallBackInterfa
 
                             JSONObject jsonResponse = new JSONObject(response.toString());
                             JSONArray dataArray = jsonResponse.getJSONArray("data");
+                            Log.i("Lenght :","" + dataArray.length());
+                            Log.i("URL",customUrl);
                             for (int i = 0; i < dataArray.length(); i++) {
                                 JSONObject anime = dataArray.getJSONObject(i);
                                 JSONObject node = anime.getJSONObject("node");
@@ -96,6 +98,7 @@ public class ConnexionViewModel extends ViewModel implements ListCallBackInterfa
 
                                 Anime animeEntity = new Anime(i, title, imageUri, score, status, epWatch);
                                 animeList.add(animeEntity);
+                                Log.i("Anime : ",animeEntity.toString());
                             }
                             Log.i("test",animeList.toString());
                         }else{

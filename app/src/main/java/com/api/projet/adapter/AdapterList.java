@@ -37,9 +37,19 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
         Anime anime = animeList.get(position);
 
         holder.titleTextView.setText(anime.getTitle());
-        holder.statusTextView.setText(anime.getStatus());
-        holder.scoreTextView.setText(String.valueOf(anime.getScore()));
-        holder.episodesWatchedTextView.setText(String.valueOf(anime.getEpWatch()));
+        String statutFirstLetterCapitalized = String.valueOf(Character.toUpperCase(String.valueOf(anime.getStatus()).charAt(0)));
+        String statutNotFirstLetter = String.valueOf(anime.getStatus().substring(1)).replace("_"," ");
+
+        holder.statusTextView.setText(statutFirstLetterCapitalized + statutNotFirstLetter);
+        holder.scoreTextView.setText(anime.getScore()+ "⭐");
+        String nbepString = String.valueOf(anime.getEpWatch());
+        String txtWatched;
+        if(anime.getStatus().equals("completed")){
+            txtWatched = nbepString + " / " + nbepString;
+        } else{
+            txtWatched = nbepString + " / ?";
+        }
+        holder.episodesWatchedTextView.setText(txtWatched);
 
         Picasso.get()
                 .load(anime.getImageUri())

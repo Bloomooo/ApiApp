@@ -1,11 +1,9 @@
 package com.api.projet.ui.mylist;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,29 +13,28 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.api.projet.AnimeListData;
 import com.api.projet.R;
 import com.api.projet.adapter.AdapterList;
-import com.api.projet.databinding.FragmentMylistBinding;
 import com.api.projet.entity.Anime;
+import com.api.projet.databinding.FragmentMylistAnimeBinding;
 
 import java.util.List;
 
-public class MyListFragment extends Fragment {
+public class MyListAnimeFragment extends Fragment {
 
-    private FragmentMylistBinding binding;
+    private FragmentMylistAnimeBinding binding;
     private RecyclerView recyclerView;
     private AdapterList adapterRecycleView;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentMylistBinding.inflate(inflater, container, false);
+        binding = FragmentMylistAnimeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         initComponents(root);
 
-        MyListViewModel myListViewModel =
-                new ViewModelProvider(this).get(MyListViewModel.class);
+        MyListAnimeViewModel myListViewModel =
+                new ViewModelProvider(this).get(MyListAnimeViewModel.class);
         myListViewModel.getAnimeList().observe(getViewLifecycleOwner(), new Observer<List<Anime>>() {
             @Override
             public void onChanged(List<Anime> anime) {

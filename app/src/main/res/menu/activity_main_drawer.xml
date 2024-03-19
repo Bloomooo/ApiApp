@@ -10,7 +10,7 @@
             android:title="Profil"/>
         <item
             android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_liste"
-            android:title="Ma liste" />
+            android:icon="@drawable/ic_menu_liste_anime"
+            android:title="Liste Anime" />
     </group>
 </menu>

@@ -1,7 +1,5 @@
 package com.api.projet.ui.mylist;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -12,9 +10,9 @@ import com.api.projet.inter.AnimeListObserver;
 
 import java.util.List;
 
-public class MyListViewModel extends ViewModel implements AnimeListObserver {
+public class MyListAnimeViewModel extends ViewModel implements AnimeListObserver {
     private MutableLiveData<List<Anime>> animeList;
-    public MyListViewModel(){
+    public MyListAnimeViewModel(){
         animeList = new MutableLiveData<>();
         animeList.setValue(AnimeListData.getAnimeList());
         AnimeListData.addObserver(this);
