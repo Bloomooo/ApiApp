@@ -1,6 +1,8 @@
 package com.api.projet.ui.mylist;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +30,6 @@ public class MyListAnimeFragment extends Fragment {
     private FragmentMylistAnimeBinding binding;
     private RecyclerView recyclerView;
     private AdapterList adapterRecycleView;
-    private Button searchButton;
     private EditText searchEditText;
     private MyListAnimeViewModel myListViewModel;
 
@@ -60,13 +61,23 @@ public class MyListAnimeFragment extends Fragment {
 
     private void initComponents(View rootView){
         recyclerView = rootView.findViewById(R.id.recyclerView);
-        searchButton = rootView.findViewById(R.id.searchButton);
         searchEditText = rootView.findViewById(R.id.searchEditText);
 
-        searchButton.setOnClickListener(new View.OnClickListener() {
+        searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.i("FILTER",searchEditText.getText().toString());   
                 myListViewModel.newFilterAnimeList(searchEditText.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
     }
