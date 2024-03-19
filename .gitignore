@@ -18,4 +18,5 @@ gradle-app.setting
 .classpath
 app/src/main/java/.env
 app/src/main/java/com/api/projet/.env.local
+app/src/main/java/com/api/projet/backend/ConnexionAPI.java
 local.properties

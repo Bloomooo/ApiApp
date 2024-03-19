@@ -13,9 +13,9 @@
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.api.projet.ui.mylist.MyListFragment"
+        android:name="com.api.projet.ui.mylist.MyListAnimeFragment"
         android:label="@string/menu_mylist"
-        tools:layout="@layout/fragment_mylist" />
+        tools:layout="@layout/fragment_mylist_anime" />
 
     <fragment
         android:id="@+id/nav_slideshow"
