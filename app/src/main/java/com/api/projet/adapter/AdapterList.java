@@ -1,7 +1,6 @@
 package com.api.projet.adapter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +28,7 @@ public class AdapterList extends RecyclerView.Adapter<AdapterList.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.liste_activity, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.listanime_item, parent, false);
         return new ViewHolder(view);
     }
 

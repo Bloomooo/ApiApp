@@ -61,8 +61,8 @@ public class ConnexionViewModel extends ViewModel implements ListCallBackInterfa
                 protected List<Anime> doInBackground(Void... voids) {
                     List<Anime> animeList = new ArrayList<>();
                     try {
-                        String custromUrl = URL_GETANIME.replace("#",username);
-                        URL url = new URL(URL_GETANIME);
+                        String customUrl = URL_GETANIME.replace("#",username);
+                        URL url = new URL(customUrl);
                         httpURLConnection = (HttpURLConnection) url.openConnection();
 
                         httpURLConnection.setRequestProperty("X-MAL-CLIENT-ID", CLIENT_ID);
@@ -97,6 +97,9 @@ public class ConnexionViewModel extends ViewModel implements ListCallBackInterfa
                                 Anime animeEntity = new Anime(i, title, imageUri, score, status, epWatch);
                                 animeList.add(animeEntity);
                             }
+                            Log.i("test",animeList.toString());
+                        }else{
+                            Log.i("ERREUR","HTTP REQUEST NOT OK");
                         }
                     } catch (IOException | JSONException e) {
                         e.printStackTrace();

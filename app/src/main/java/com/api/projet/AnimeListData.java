@@ -13,28 +13,37 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.api.projet.backend.ConnexionAPI;
 import com.api.projet.entity.Anime;
 import com.api.projet.adapter.AdapterList;
+import com.api.projet.inter.AnimeListObserver;
 import com.api.projet.inter.ListCallBackInterface;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnimeListData{
-    private static MutableLiveData<List<Anime>> animeList;
+public class AnimeListData {
+    private static List<Anime> animeList = new ArrayList<>();
+    private static List<AnimeListObserver> observers = new ArrayList<>();
 
-    public static LiveData<List<Anime>> getAnimeList() {
-        if(animeList == null){
-            animeList = new MutableLiveData<>();
-            animeList.setValue(new ArrayList<>());
-        }
-        return animeList;
+    public static void addObserver(AnimeListObserver observer) {
+        observers.add(observer);
     }
 
-    public static void updateAnimeList(List<Anime> animeList) {
-        if(AnimeListData.animeList == null){
-            AnimeListData.animeList = new MutableLiveData<>();
-            AnimeListData.animeList.setValue(new ArrayList<>());
+    public static void removeObserver(AnimeListObserver observer) {
+        observers.remove(observer);
+    }
+
+    public static void updateAnimeList(List<Anime> newAnimeList) {
+        animeList = new ArrayList<>();
+        animeList.addAll(newAnimeList);
+        notifyObservers();
+    }
+
+    private static void notifyObservers() {
+        for (AnimeListObserver observer : observers) {
+            observer.onAnimeListUpdated(animeList);
         }
-        AnimeListData.animeList.getValue().clear();
-        AnimeListData.animeList.getValue().addAll(animeList);
+    }
+
+    public static List<Anime> getAnimeList() {
+        return animeList;
     }
 }

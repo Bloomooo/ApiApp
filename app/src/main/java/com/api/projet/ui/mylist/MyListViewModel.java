@@ -1,18 +1,33 @@
 package com.api.projet.ui.mylist;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class MyListViewModel extends ViewModel {
+import com.api.projet.AnimeListData;
+import com.api.projet.entity.Anime;
+import com.api.projet.inter.AnimeListObserver;
 
-    private final MutableLiveData<String> mText;
+import java.util.List;
 
-    public MyListViewModel() {
-        mText = new MutableLiveData<>();
+public class MyListViewModel extends ViewModel implements AnimeListObserver {
+    private MutableLiveData<List<Anime>> animeList;
+    public MyListViewModel(){
+        animeList = new MutableLiveData<>();
+        animeList.setValue(AnimeListData.getAnimeList());
+        AnimeListData.addObserver(this);
     }
 
-    public LiveData<String> getText() {
-        return mText;
+
+
+    public LiveData<List<Anime>> getAnimeList() {
+        return animeList;
+    }
+
+    @Override
+    public void onAnimeListUpdated(List<Anime> newAnimeList) {
+        animeList.setValue(newAnimeList);
     }
 }
