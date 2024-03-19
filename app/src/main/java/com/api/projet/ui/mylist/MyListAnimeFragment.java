@@ -1,9 +1,14 @@
 package com.api.projet.ui.mylist;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +30,8 @@ public class MyListAnimeFragment extends Fragment {
     private FragmentMylistAnimeBinding binding;
     private RecyclerView recyclerView;
     private AdapterList adapterRecycleView;
+    private EditText searchEditText;
+    private MyListAnimeViewModel myListViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -33,7 +40,7 @@ public class MyListAnimeFragment extends Fragment {
 
         initComponents(root);
 
-        MyListAnimeViewModel myListViewModel =
+        myListViewModel =
                 new ViewModelProvider(this).get(MyListAnimeViewModel.class);
         myListViewModel.getAnimeList().observe(getViewLifecycleOwner(), new Observer<List<Anime>>() {
             @Override
@@ -54,6 +61,25 @@ public class MyListAnimeFragment extends Fragment {
 
     private void initComponents(View rootView){
         recyclerView = rootView.findViewById(R.id.recyclerView);
+        searchEditText = rootView.findViewById(R.id.searchEditText);
+
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.i("FILTER",searchEditText.getText().toString());   
+                myListViewModel.newFilterAnimeList(searchEditText.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @Override
@@ -61,4 +87,5 @@ public class MyListAnimeFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
 }
