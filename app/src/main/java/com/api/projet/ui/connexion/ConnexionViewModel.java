@@ -33,8 +33,8 @@ public class ConnexionViewModel extends ViewModel implements ListCallBackInterfa
     private HttpURLConnection httpURLConnection;
     public  ConnexionViewModel(){
         ConnexionAPI conn = ConnexionAPI.getInstance();
-        CLIENT_ID = conn.getCLIENT_ID();
-        URL_GETANIME = conn.getURLGETANIME();
+        CLIENT_ID = conn.getClient_id();
+        URL_GETANIME = conn.getUrl();
     }
 
 
