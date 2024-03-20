@@ -20,6 +20,8 @@ import com.google.firebase.auth.FirebaseUser;
 public class LoginMain extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+
+    private FirebaseAuth.AuthStateListener authStateListener;
     private EditText emailEditText;
 
     private EditText passwordEditText;
@@ -35,12 +37,36 @@ public class LoginMain extends AppCompatActivity {
         initListener(loginButton, signUpButton);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(authStateListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (authStateListener != null) {
+            mAuth.removeAuthStateListener(authStateListener);
+        }
+    }
     private void initComponent(){
         this.mAuth = FirebaseAuth.getInstance();
         this.emailEditText = findViewById(R.id.emailLogin);
         this.passwordEditText = findViewById(R.id.passwordLogin);
         this.loginButton = findViewById(R.id.loginButton);
         this.signUpButton = findViewById(R.id.signupLoginButton);
+        this.authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    Intent intent = new Intent(LoginMain.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+        };
     }
 
     private void initListener(Button loginButton, Button signUpButton){
