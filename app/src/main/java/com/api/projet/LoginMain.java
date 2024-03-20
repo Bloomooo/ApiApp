@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.api.projet.network.NetworkState;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -32,9 +33,14 @@ public class LoginMain extends AppCompatActivity {
     @Override
     public void onCreate(Bundle bundle){
         super.onCreate(bundle);
-        setContentView(R.layout.login_activity);
-        initComponent();
-        initListener(loginButton, signUpButton);
+        if(!NetworkState.isConnected(this)){
+            Toast.makeText(this, "Aucune connexion Internet. Certaines fonctionnalités peuvent ne pas être disponibles.", Toast.LENGTH_LONG).show();
+        }else{
+            setContentView(R.layout.login_activity);
+            initComponent();
+            initListener(loginButton, signUpButton);
+        }
+
     }
 
     @Override
