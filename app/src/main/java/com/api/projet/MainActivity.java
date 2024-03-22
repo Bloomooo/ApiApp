@@ -8,6 +8,7 @@ import android.view.Menu;
 
 import com.api.projet.backend.ConnexionAPI;
 import com.api.projet.network.NetworkState;
+import com.api.projet.network.client.ClientSocket;
 import com.api.projet.ui.connexion.ConnexionViewModel;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        ClientSocket.connectToServer();
         setSupportActionBar(binding.appBarMain.toolbar);
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
