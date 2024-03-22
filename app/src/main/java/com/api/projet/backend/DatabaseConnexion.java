@@ -4,18 +4,22 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class DatabaseConnexion {
 
-    private DatabaseConnexion instance;
+    private static DatabaseConnexion instance;
 
     private FirebaseFirestore db;
     private DatabaseConnexion(){
         this.db = FirebaseFirestore.getInstance();
     }
 
-    public DatabaseConnexion getInstance(){
+    public static DatabaseConnexion getInstance(){
         if(instance == null){
-            instance =  new DatabaseConnexion();
+            instance = new DatabaseConnexion();
         }
         return instance;
+    }
+
+    public FirebaseFirestore getConnexionDatabase(){
+        return this.db;
     }
 
     /*  Exemple ecriture dans la bd
