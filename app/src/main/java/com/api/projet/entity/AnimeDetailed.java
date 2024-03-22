@@ -1,5 +1,6 @@
 package com.api.projet.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import java.util.List;
@@ -7,7 +8,6 @@ import java.util.List;
 public class AnimeDetailed {
     private int id;
     private String title;
-    private String titleEn;
     private String titleJp;
     private String startDate;
     private String endDate;
@@ -15,20 +15,18 @@ public class AnimeDetailed {
     private String noteMoy;
     private String rank;
     private String popularity;
-    private String genre;
+    private List<String> genres;
     private List<String> pictures;
     private String imageUri;
-    private int score;
     private String status;
-    private int ep;
+    private String ep;
 
-    public AnimeDetailed(int id, String title, String titleEn, String titleJp,
+    public AnimeDetailed(int id, String title, String titleJp,
                          String startDate, String endDate, String synopsis, String noteMoy, String rank,
-                         String popularity, String genre, List<String> pictures,
-                         String imageUri, int score, String status, int ep) {
+                         String popularity, List<String> genres, List<String> pictures,
+                         String imageUri, String status, String ep) {
         this.id = id;
         this.title = title;
-        this.titleEn = titleEn;
         this.titleJp = titleJp;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -36,10 +34,9 @@ public class AnimeDetailed {
         this.noteMoy = noteMoy;
         this.rank = rank;
         this.popularity = popularity;
-        this.genre = genre;
-        this.pictures = pictures;
+        this.genres = new ArrayList<>(genres);
+        this.pictures = new ArrayList<>(pictures);
         this.imageUri = imageUri;
-        this.score = score;
         this.status = status;
         this.ep = ep;
     }
@@ -51,13 +48,10 @@ public class AnimeDetailed {
         return title;
     }
 
-    public int getEp() {
+    public String getEp() {
         return ep;
     }
 
-    public int getScore() {
-        return score;
-    }
 
     public List<String> getPictures() {
         return pictures;
@@ -71,8 +65,8 @@ public class AnimeDetailed {
         return endDate;
     }
 
-    public String getGenre() {
-        return genre;
+    public List<String> getGenres() {
+        return genres;
     }
 
     public String getImageUri() {
@@ -99,12 +93,47 @@ public class AnimeDetailed {
         return synopsis;
     }
 
-    public String getTitleEn() {
-        return titleEn;
-    }
 
     public String getTitleJp() {
         return titleJp;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder genresStringBuilder = new StringBuilder();
+        for (String genre : genres) {
+            genresStringBuilder.append(genre).append(", ");
+        }
+        String genresString = genresStringBuilder.toString();
+        if (!genresString.isEmpty()) {
+            genresString = genresString.substring(0, genresString.length() - 2); // Supprime la virgule et l'espace à la fin
+        }
+
+        StringBuilder picturesStringBuilder = new StringBuilder();
+        for (String picture : pictures) {
+            picturesStringBuilder.append(picture).append(", ");
+        }
+        String picturesString = picturesStringBuilder.toString();
+        if (!picturesString.isEmpty()) {
+            picturesString = picturesString.substring(0, picturesString.length() - 2); // Supprime la virgule et l'espace à la fin
+        }
+
+        return "AnimeDetailed{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", titleJp='" + titleJp + '\'' +
+                ", startDate='" + startDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                ", synopsis='" + synopsis + '\'' +
+                ", noteMoy='" + noteMoy + '\'' +
+                ", rank='" + rank + '\'' +
+                ", popularity='" + popularity + '\'' +
+                ", genres=" + genresString +
+                ", pictures=" + picturesString +
+                ", imageUri='" + imageUri + '\'' +
+                ", status='" + status + '\'' +
+                ", ep='" + ep + '\'' +
+                '}';
     }
 }
 

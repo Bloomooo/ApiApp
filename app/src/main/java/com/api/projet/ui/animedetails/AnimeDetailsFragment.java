@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,10 @@ public class AnimeDetailsFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         root = binding.getRoot();
+        int animeId = getArguments().getInt("animeId");
+        AnimeDetailsViewModel controller = new AnimeDetailsViewModel();
+        controller.loadInfoAnime(animeId);
+
         return  root;
     }
 

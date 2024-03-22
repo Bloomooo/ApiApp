@@ -61,7 +61,7 @@ public class MyListAnimeViewModel extends ViewModel implements AnimeListObserver
         Anime animeClicked = animeList.getValue().get(position);
         Log.i("Anime :", animeClicked.toString());
         Bundle bundle = new Bundle();
-        bundle.putString("animeId", animeClicked.getTitle()); // Supposons que vous avez une méthode getId() dans la classe Anime pour récupérer l'ID
+        bundle.putInt("animeId", animeClicked.getId());
         NavController navController = Navigation.findNavController(rv);
         navController.navigate(R.id.nav_anime_details, bundle);
 

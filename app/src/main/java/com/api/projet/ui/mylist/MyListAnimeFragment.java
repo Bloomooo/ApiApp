@@ -72,7 +72,6 @@ public class MyListAnimeFragment extends Fragment {
             public void onLongPress(MotionEvent e) {
                 super.onLongPress(e);
                 myListViewModel.itemAction(recyclerView,e);
-                return;
             }
         });
 
