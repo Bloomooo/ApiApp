@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
+        android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Yanisenzoprojetapi"
-        android:enableOnBackInvokedCallback="true"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.animedetail.animeDetails"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -20,7 +25,9 @@
             android:theme="@style/Theme.Yanisenzoprojetapi.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
+
                 <data android:scheme="projectmyanimelist" />
             </intent-filter>
         </activity>
@@ -31,7 +38,9 @@
             android:theme="@style/Theme.Yanisenzoprojetapi.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
+
                 <data android:scheme="projectmyanimelist" />
             </intent-filter>
         </activity>
@@ -40,11 +49,11 @@
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Yanisenzoprojetapi.NoActionBar">
-
-
             <intent-filter>
                 <action android:name="android.intent.action" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
+
                 <data android:scheme="projectmyanimelist" />
             </intent-filter>
         </activity>

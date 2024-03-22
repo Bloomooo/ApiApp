@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -33,6 +35,7 @@ public class MyListAnimeFragment extends Fragment {
     private EditText searchEditText;
     private MyListAnimeViewModel myListViewModel;
 
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentMylistAnimeBinding.inflate(inflater, container, false);
@@ -50,6 +53,7 @@ public class MyListAnimeFragment extends Fragment {
             }
         });
 
+
         return root;
     }
 
@@ -62,6 +66,15 @@ public class MyListAnimeFragment extends Fragment {
     private void initComponents(View rootView){
         recyclerView = rootView.findViewById(R.id.recyclerView);
         searchEditText = rootView.findViewById(R.id.searchEditText);
+
+        GestureDetector gestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public void onLongPress(MotionEvent e) {
+                super.onLongPress(e);
+                myListViewModel.itemAction(recyclerView,e);
+                return;
+            }
+        });
 
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -79,6 +92,29 @@ public class MyListAnimeFragment extends Fragment {
 
             }
         });
+
+        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+                gestureDetector.onTouchEvent(e);
+
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+            }
+
+
+        });
+
+
     }
 
     @Override
@@ -86,5 +122,7 @@ public class MyListAnimeFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
+
 
 }
