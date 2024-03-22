@@ -71,7 +71,6 @@ public class MyListAnimeFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.i("FILTER",searchEditText.getText().toString());   
                 myListViewModel.newFilterAnimeList(searchEditText.getText().toString());
             }
 

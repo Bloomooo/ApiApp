@@ -18,9 +18,13 @@ public class MyListAnimeViewModel extends ViewModel implements AnimeListObserver
     private List<Anime> animeListBase;
     public MyListAnimeViewModel(){
         animeList = new MutableLiveData<>();
-        animeList.setValue(AnimeListData.getAnimeList());
         animeListBase = new ArrayList<>();
         AnimeListData.addObserver(this);
+        List<Anime> list = AnimeListData.getAnimeList();
+        if(!list.isEmpty()){
+            animeList.setValue(list);
+            animeListBase = new ArrayList<>(list);
+        }
     }
 
 
@@ -36,7 +40,6 @@ public class MyListAnimeViewModel extends ViewModel implements AnimeListObserver
     }
 
     public void newFilterAnimeList(String filter){
-        Log.i("Filter :", filter);
         List<Anime> list = new ArrayList<>();
         for(Anime a : animeListBase){
             if(a.getTitle().toLowerCase().contains(filter.toLowerCase())){
