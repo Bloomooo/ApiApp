@@ -14,6 +14,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,9 +31,10 @@ public class DatabaseQuery {
     private DatabaseQuery(){
         this.databaseConnexion = DatabaseConnexion.getInstance();
         this.db = databaseConnexion.getConnexionDatabase();
+        this.lobbyList = new ArrayList<>();
     }
 
-    public boolean addLobby(Map<String, Object> lobby){
+    public boolean addLobby(Map<Integer, Lobby> lobby){
         this.db.collection("lobby")
                 .add(lobby)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -60,8 +62,11 @@ public class DatabaseQuery {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful()){
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Lobby lobby = document.toObject(Lobby.class);
+                                long id = (long) document.get("id");
+                                Map<String, String> map = (Map<String, String>) document.get("Lobby");
+                                Lobby lobby = new Lobby(map.get("name"), map.get("author"));
                                 lobbyList.add(lobby);
+                                Log.i("DATA ", id+" " +lobby.getName()+" "+lobby.getAuthor());
                             }
                         }
                     }

@@ -6,7 +6,8 @@ public class Lobby {
 
     public String author;
 
-
+    public Lobby() {
+    }
 
     public Lobby(String name, String author){
         this.name = name;
