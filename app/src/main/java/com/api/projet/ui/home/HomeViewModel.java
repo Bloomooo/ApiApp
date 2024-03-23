@@ -23,6 +23,7 @@ public class HomeViewModel extends ViewModel implements LobbyListObserver {
     public HomeViewModel() {
         this.db = DatabaseQuery.getInstance();
         initComponent();
+        fetchLobbyData();
     }
 
 
@@ -32,9 +33,15 @@ public class HomeViewModel extends ViewModel implements LobbyListObserver {
 
     private void initComponent(){
         this.listLobby = new MutableLiveData<>();
-        this.listLobby.setValue(db.getLobby());
-    }
 
+    }
+    private void fetchLobbyData() {
+        db.getLobby().addOnSuccessListener(lobbyList -> {
+            listLobby.setValue(lobbyList);
+        }).addOnFailureListener(e -> {
+            Log.e("HomeViewModel", "Failed to fetch lobby data: " + e.getMessage());
+        });
+    }
     @Override
     public void onLobbyListUpdated(List<Lobby> newLobbyList){
         this.listLobby.setValue(newLobbyList);
