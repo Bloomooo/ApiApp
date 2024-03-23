@@ -55,6 +55,7 @@ public class HomeFragment extends Fragment implements IntentInterface {
     private Button createLobbyButton;
 
     private FirebaseAuth mAuth;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -138,7 +139,12 @@ public class HomeFragment extends Fragment implements IntentInterface {
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                Log.d("CreateLobby", "Lobby created successfully");
+                String lobbyId = response.headers().get("lobbyId");
+                String message = response.headers().get("message");
+                Log.d("CreateLobby", message+" : " + lobbyId);
+                Intent intent = new Intent(getContext(), PreLobby.class);
+                intent.putExtra("lobbyId", lobbyId);
+                startActivity(intent);
             }
 
             @Override
@@ -161,7 +167,7 @@ public class HomeFragment extends Fragment implements IntentInterface {
     public void doIntent(String lobbyId) {
         Intent intent = new Intent(getContext(), PreLobby.class);
         intent.putExtra("lobbyId", lobbyId);
-        Log.i("GAIGAJFGAIJFJIAA",lobbyId);
         startActivity(intent);
     }
+
 }
