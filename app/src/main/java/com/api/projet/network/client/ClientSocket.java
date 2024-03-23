@@ -21,7 +21,7 @@ public class ClientSocket {
         @Override
         protected Void doInBackground(String... params) {
             try {
-                mSocket = IO.socket("http://192.168.195.1:5500");
+                mSocket = IO.socket("http://172.20.10.2:5500");
             } catch (URISyntaxException e) {
                 Log.e("ClientSocket", "Erreur de syntaxe d'URI", e);
                 cancel(true);
