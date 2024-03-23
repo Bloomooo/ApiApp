@@ -6,20 +6,20 @@
     android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewLobby"
+        android:id="@+id/recyclerViewPreLobby"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/createLobby" />
+        app:layout_constraintBottom_toTopOf="@id/startButton" />
 
     <Button
-        android:id="@+id/createLobby"
+        android:id="@+id/startButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Create lobby"
-        app:layout_constraintTop_toBottomOf="@id/recyclerViewLobby"
+        android:text="Start"
+        app:layout_constraintTop_toBottomOf="@id/recyclerViewPreLobby"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
