@@ -2,6 +2,8 @@ package com.api.projet.ui.game;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Button;
 
@@ -13,9 +15,15 @@ import com.api.projet.R;
 import com.api.projet.adapter.PreLobbyAdapter;
 import com.api.projet.backend.DatabaseQuery;
 import com.api.projet.entity.Player;
+import com.api.projet.network.client.ClientSocket;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.socket.emitter.Emitter;
 
 public class PreLobby extends AppCompatActivity {
 
@@ -54,6 +62,7 @@ public class PreLobby extends AppCompatActivity {
     }
 
     private void query(){
+        playerList.clear();
         db.getPlayer(lobbyId).addOnSuccessListener(playerList ->{
             this.playerList.addAll(playerList);
             updateData();
@@ -68,7 +77,29 @@ public class PreLobby extends AppCompatActivity {
             //startActivity(intent);
         });
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        ClientSocket.on("lobbyMessage", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                if (args.length > 0 && args[0] instanceof String) {
+                    String message = (String) args[0];
+                    Log.d("SocketEvent", "Received lobby message: " + message);
+                    query();
+                    updateData();
+                }
+            }
+        });
+    }
+
     private void updateData(){
-        this.preLobbyAdapter.setData(playerList);
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                preLobbyAdapter.setData(playerList);
+            }
+        });
     }
 }
