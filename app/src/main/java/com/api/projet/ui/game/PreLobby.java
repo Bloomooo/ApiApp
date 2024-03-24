@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +21,7 @@ import com.api.projet.entity.Lobby;
 import com.api.projet.entity.Player;
 import com.api.projet.entity.User;
 import com.api.projet.network.client.ClientSocket;
+import com.api.projet.ui.home.HomeFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONArray;
@@ -43,6 +45,8 @@ public class PreLobby extends AppCompatActivity {
 
     private String lobbyId;
     private Button buttonStart;
+
+    private ImageButton buttonExit;
     @Override
     public void onCreate(Bundle bundle){
         super.onCreate(bundle);
@@ -64,6 +68,7 @@ public class PreLobby extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         this.preLobbyAdapter = new PreLobbyAdapter(this, new ArrayList<>());
         this.recyclerView.setAdapter(preLobbyAdapter);
+        this.buttonExit = findViewById(R.id.backButton);
         Intent intent = getIntent();
         lobbyId = intent.getStringExtra("lobbyId");
     }
@@ -93,6 +98,19 @@ public class PreLobby extends AppCompatActivity {
         this.buttonStart.setOnClickListener(v -> {
             //Intent intent = new Intent(PreLobby.this, Game.class);
             //startActivity(intent);
+        });
+        this.buttonExit.setOnClickListener(v->{
+            JSONObject data = new JSONObject();
+
+            try {
+                data.put("lobbyId", lobbyId);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+
+            ClientSocket.emit("disconnectFromLobby",data);
+            Intent intent = new Intent(PreLobby.this, HomeFragment.class);
+            startActivity(intent);
         });
     }
 

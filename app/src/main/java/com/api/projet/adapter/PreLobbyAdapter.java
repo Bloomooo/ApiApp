@@ -1,20 +1,17 @@
 package com.api.projet.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.api.projet.R;
-import com.api.projet.entity.Lobby;
 import com.api.projet.entity.Player;
-import com.api.projet.inter.IntentInterface;
+import com.api.projet.entity.User;
 
 import java.util.List;
 
