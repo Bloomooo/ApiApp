@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.api.projet.entity.User;
 import com.api.projet.network.NetworkState;
 import com.api.projet.network.client.ClientSocket;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -69,6 +70,7 @@ public class LoginMain extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
+                    ClientSocket.connectToServer(new User(user.getDisplayName()));
                     Intent intent = new Intent(LoginMain.this, MainActivity.class);
                     startActivity(intent);
                     finish();

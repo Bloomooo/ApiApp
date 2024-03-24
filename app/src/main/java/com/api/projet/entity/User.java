@@ -1,16 +1,15 @@
 package com.api.projet.entity;
 
-public class Player {
+public class User {
 
     private String name;
 
-    private String image;
-
-    public Player(String name){
+    public User(String name){
         this.name = name;
     }
 
     public String getName(){
         return this.name;
     }
+
 }
