@@ -53,8 +53,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         if(!NetworkState.isConnected(this)){
             Toast.makeText(this, "Aucune connexion Internet. Certaines fonctionnalités peuvent ne pas être disponibles.", Toast.LENGTH_LONG).show();
-        }else{
-            ClientSocket.connectToServer();
         }
 
         setSupportActionBar(binding.appBarMain.toolbar);

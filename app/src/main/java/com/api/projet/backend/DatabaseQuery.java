@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.api.projet.entity.Lobby;
 import com.api.projet.entity.Player;
-import com.google.android.gms.tasks.OnCompleteListener;
+import com.api.projet.entity.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -14,8 +14,8 @@ import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,8 +78,9 @@ public class DatabaseQuery {
                 });
         return taskCompletionSource.getTask();
     }
-    public Task<List<Player>> getPlayer(String lobbyId){
+    public Task<List<Player>> getPlayers(String lobbyId) {
         TaskCompletionSource<List<Player>> taskCompletionSource = new TaskCompletionSource<>();
+
         db.collection("lobby").document(lobbyId)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -87,11 +88,20 @@ public class DatabaseQuery {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
                             List<Player> playerList = new ArrayList<>();
-                            List<String> users = (List<String>) document.get("users");
-                            if (users != null) {
-                                for (String userName : users) {
-                                    Player player = new Player(userName);
-                                    playerList.add(player);
+                            Object playersObj = document.get("players");
+                            if (playersObj instanceof List<?>) {
+                                List<?> users = (List<?>) playersObj;
+                                for (Object playerObj : users) {
+                                    if (playerObj instanceof Map) {
+                                        Map<String, Object> players = (Map<String, Object>) playerObj;
+                                        String idString = (String) players.get("id");
+                                        Long id = Long.parseLong(idString);
+                                        String userName = (String) players.get("name");
+                                        Player player = new Player(id, userName);
+                                        playerList.add(player);
+                                    } else {
+                                        System.out.println("Unexpected data type in users list: " + playerObj.getClass().getName());
+                                    }
                                 }
                             }
                             taskCompletionSource.setResult(playerList);
@@ -102,9 +112,37 @@ public class DatabaseQuery {
                         taskCompletionSource.setException(task.getException());
                     }
                 });
+
         return taskCompletionSource.getTask();
     }
 
+
+    public Task<Player> foundHostLobbyById(String lobbyId) {
+        TaskCompletionSource<Player> taskCompletionSource = new TaskCompletionSource<>();
+
+        DocumentReference lobbyRef = db.collection("lobby").document(lobbyId);
+        lobbyRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    String hostName = document.getString("host.name");
+                    String hostIdString = document.getString("host.id");
+                    if (hostIdString != null) {
+                        Long hostId = Long.parseLong(hostIdString);
+                        taskCompletionSource.setResult(new Player(hostId, hostName));
+                    } else {
+                        taskCompletionSource.setException(new Exception("Host ID is null"));
+                    }
+                } else {
+                    taskCompletionSource.setException(new FirebaseFirestoreException("Document does not exist", FirebaseFirestoreException.Code.NOT_FOUND));
+                }
+            } else {
+                taskCompletionSource.setException(task.getException());
+            }
+        });
+
+        return taskCompletionSource.getTask();
+    }
 
 
 

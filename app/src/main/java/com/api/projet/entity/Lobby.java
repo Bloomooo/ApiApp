@@ -1,5 +1,7 @@
 package com.api.projet.entity;
 
+import java.util.Objects;
+
 public class Lobby {
 
     private String id ;
@@ -7,9 +9,6 @@ public class Lobby {
     public String name;
 
     public String author;
-
-    public Lobby() {
-    }
 
     public Lobby(String id, String name, String author){
         this.id = id;
@@ -26,5 +25,18 @@ public class Lobby {
 
     public String getAuthor(){
         return this.author;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Lobby)) return false;
+        Lobby lobby = (Lobby) o;
+        return Objects.equals(getId(), lobby.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

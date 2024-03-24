@@ -3,6 +3,9 @@ package com.api.projet.network.client;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.api.projet.entity.User;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
@@ -15,14 +18,19 @@ public class ClientSocket {
 
     private static Socket mSocket;
 
-    public static void connectToServer() {
-        new ConnectTask().execute();
+    public static void connectToServer(User player) {
+        new ConnectTask(player).execute();
     }
 
-    private static class ConnectTask extends AsyncTask<String, Void, Void> {
+    private static class ConnectTask extends AsyncTask<Void, Void, Void> {
+        private User user;
+
+        public ConnectTask(User user) {
+            this.user = user;
+        }
 
         @Override
-        protected Void doInBackground(String... params) {
+        protected Void doInBackground(Void... voids) {
             try {
                 mSocket = IO.socket("http://172.20.10.2:5500");
             } catch (URISyntaxException e) {
@@ -30,7 +38,7 @@ public class ClientSocket {
                 cancel(true);
             }
             return null;
-        }   
+        }
 
         @Override
         protected void onPostExecute(Void result) {
@@ -38,6 +46,16 @@ public class ClientSocket {
             if (mSocket != null) {
                 mSocket.connect();
                 Log.d("ClientSocket", "Tentative de connexion au serveur...");
+                if (user != null) {
+                    JSONObject playerInfo = new JSONObject();
+                    try {
+                        playerInfo.put("name", user.getName());
+
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                    mSocket.emit("registerUser", playerInfo);
+                }
             }
         }
 
@@ -71,4 +89,6 @@ public class ClientSocket {
             Log.e("ClientSocket", "Socket not initialized");
         }
     }
+
+
 }

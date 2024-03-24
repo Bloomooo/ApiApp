@@ -1,5 +1,7 @@
 package com.api.projet.ui.game;
 
+import static android.app.PendingIntent.getActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,9 +16,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.api.projet.R;
 import com.api.projet.adapter.PreLobbyAdapter;
 import com.api.projet.backend.DatabaseQuery;
+import com.api.projet.entity.Lobby;
 import com.api.projet.entity.Player;
+import com.api.projet.entity.User;
 import com.api.projet.network.client.ClientSocket;
+import com.google.firebase.auth.FirebaseAuth;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -43,8 +49,10 @@ public class PreLobby extends AppCompatActivity {
         setContentView(R.layout.activity_prelobby);
 
         initComponent();
-        initListener();
-        query();
+
+        queryPlayer();
+
+        queryLobby();
     }
 
 
@@ -53,7 +61,6 @@ public class PreLobby extends AppCompatActivity {
         this.db = DatabaseQuery.getInstance();
         this.playerList = new ArrayList<>();
         this.recyclerView = findViewById(R.id.recyclerViewPreLobby);
-        this.buttonStart = findViewById(R.id.startButton);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         this.preLobbyAdapter = new PreLobbyAdapter(this, new ArrayList<>());
         this.recyclerView.setAdapter(preLobbyAdapter);
@@ -61,13 +68,24 @@ public class PreLobby extends AppCompatActivity {
         lobbyId = intent.getStringExtra("lobbyId");
     }
 
-    private void query(){
+    private void queryPlayer(){
         playerList.clear();
-        db.getPlayer(lobbyId).addOnSuccessListener(playerList ->{
+        db.getPlayers(lobbyId).addOnSuccessListener(playerList ->{
             this.playerList.addAll(playerList);
             updateData();
         }).addOnFailureListener(e ->{
             Log.e("Error getPlayer() ", e.getMessage());
+        });
+    }
+
+    private void queryLobby(){
+        db.foundHostLobbyById(lobbyId).addOnSuccessListener(host->{
+            for(Player player : playerList){
+                if(host.getId().equals(player.getId()) && host.getName().equals(player.getName())){
+                    this.buttonStart = findViewById(R.id.startButton);
+                    initListener();
+                }
+            }
         });
     }
 
@@ -81,19 +99,20 @@ public class PreLobby extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        ClientSocket.on("lobbyMessage", new Emitter.Listener() {
+        ClientSocket.on("updatePlayersList", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                if (args.length > 0 && args[0] instanceof String) {
-                    String message = (String) args[0];
-                    Log.d("SocketEvent", "Received lobby message: " + message);
-                    query();
-                    updateData();
-                }
+                queryPlayer();
+                updateData();
             }
         });
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        ClientSocket.off("updatePlayersList");
+    }
     private void updateData(){
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
