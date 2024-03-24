@@ -19,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
+import java.util.Objects;
 
 
 public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.ViewHolder> {
@@ -85,4 +86,15 @@ public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.ViewHolder> 
         lobbyList.addAll(newData);
         notifyDataSetChanged();
     }
+
+    public void addLobby(Lobby lobby) {
+            if(!lobbyList.contains(lobby)){
+                lobbyList.add(lobby);
+            }
+            notifyDataSetChanged();
+    }
+
+
+
+
 }

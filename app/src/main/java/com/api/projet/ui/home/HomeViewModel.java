@@ -46,4 +46,8 @@ public class HomeViewModel extends ViewModel implements LobbyListObserver {
     public void onLobbyListUpdated(List<Lobby> newLobbyList){
         this.listLobby.setValue(newLobbyList);
     }
+
+    public void update(){
+
+    }
 }

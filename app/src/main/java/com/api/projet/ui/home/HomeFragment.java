@@ -152,23 +152,34 @@ public class HomeFragment extends Fragment implements IntentInterface {
     @Override
     public void onStart() {
         super.onStart();
-        ClientSocket.on("createLobby", new Emitter.Listener() {
+        ClientSocket.on("lobbyCreated", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
                 JSONObject data = (JSONObject) args[0];
-                Intent intent = new Intent(getContext(), PreLobby.class);
-                try {
-                    intent.putExtra("lobbyId", data.getString("lobbyId"));
-                    startActivity(intent);
-                    Log.d("HomeFragment", "Lobby created: " + data.getString("lobbyId"));
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
 
+                        Lobby lobby = null;
+                        try {
+                            lobby = new Lobby(data.getString("lobbyId"), data.getString("name"), data.getString("username"));
+                            adapterRecycleView.addLobby(lobby);
+
+                            Log.d("HomeFragment", "Lobby created: " + data.getString("lobbyId"));
+                            if(data.getString("username").equals(FirebaseAuth.getInstance().getCurrentUser().getDisplayName())){
+                                Intent intent = new Intent(getContext(), PreLobby.class);
+                                intent.putExtra("lobbyId", data.getString("lobbyId"));
+                                startActivity(intent);
+                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                });
             }
         });
-
     }
+
 
     @Override
     public void onStop() {
