@@ -13,6 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.api.projet.R;
 import com.api.projet.entity.Lobby;
 import com.api.projet.inter.IntentInterface;
+import com.api.projet.network.client.ClientSocket;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -72,6 +76,8 @@ public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.ViewHolder> 
                 authorTextViewLobby.setText(lobby.getAuthor());
                 nameTextViewLobby.setText(lobby.getName());
             }
+
+
         }
 
     public void setData(List<Lobby> newData) {

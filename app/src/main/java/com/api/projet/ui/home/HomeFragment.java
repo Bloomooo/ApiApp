@@ -24,6 +24,7 @@ import com.api.projet.databinding.FragmentHomeBinding;
 import com.api.projet.entity.Lobby;
 import com.api.projet.inter.ApiService;
 import com.api.projet.inter.IntentInterface;
+import com.api.projet.network.client.ClientSocket;
 import com.api.projet.ui.game.PreLobby;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
@@ -36,6 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.socket.emitter.Emitter;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -50,11 +52,7 @@ public class HomeFragment extends Fragment implements IntentInterface {
     private RecyclerView recyclerView;
     private LobbyAdapter adapterRecycleView;
 
-    private ApiService apiService;
-
     private Button createLobbyButton;
-
-    private FirebaseAuth mAuth;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -83,13 +81,6 @@ public class HomeFragment extends Fragment implements IntentInterface {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapterRecycleView = new LobbyAdapter(getContext(), new ArrayList<>(), this);
         recyclerView.setAdapter(adapterRecycleView);
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://172.20.10.2:5500/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        apiService = retrofit.create(ApiService.class);
-        mAuth = FirebaseAuth.getInstance();
-
     }
 
     private void initListener(){
@@ -105,7 +96,7 @@ public class HomeFragment extends Fragment implements IntentInterface {
                             EditText lobbyNameEditText = dialogView.findViewById(R.id.lobbyNameEditText);
                             String lobbyName = lobbyNameEditText.getText().toString();
 
-                            createLobby(lobbyName, mAuth.getCurrentUser().getEmail());
+                            createLobby(lobbyName);
                         }
                     })
                     .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
@@ -121,37 +112,16 @@ public class HomeFragment extends Fragment implements IntentInterface {
 
     }
 
-    private void createLobby(String name, String host){
-        Gson gson = new Gson();
+    private void createLobby(String name){
+        JSONObject lobbyDetails = new JSONObject();
+        try {
+            lobbyDetails.put("name", name);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        Map<String, Object> lobbyDetails = new HashMap<>();
-        lobbyDetails.put("name", name);
-        lobbyDetails.put("author", host);
+        ClientSocket.emit("createLobby", lobbyDetails);
 
-        Map<String, Object> lobbyWrapper = new HashMap<>();
-        lobbyWrapper.put("lobby", lobbyDetails);
-
-        String jsonBody = gson.toJson(lobbyWrapper);
-
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonBody);
-
-        Call<Void> call = apiService.createLobby(requestBody);
-        call.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                String lobbyId = response.headers().get("lobbyId");
-                String message = response.headers().get("message");
-                Log.d("CreateLobby", message+" : " + lobbyId);
-                Intent intent = new Intent(getContext(), PreLobby.class);
-                intent.putExtra("lobbyId", lobbyId);
-                startActivity(intent);
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Log.e("CreateLobby", "Failed to create lobby");
-            }
-        });
     }
 
     private void setupLiveDataObservers(HomeViewModel homeViewModel) {
@@ -165,9 +135,44 @@ public class HomeFragment extends Fragment implements IntentInterface {
 
     @Override
     public void doIntent(String lobbyId) {
+        joinLobby(lobbyId);
         Intent intent = new Intent(getContext(), PreLobby.class);
         intent.putExtra("lobbyId", lobbyId);
         startActivity(intent);
+    }
+    private void joinLobby(String lobbyId){
+        JSONObject jsonObject = new JSONObject();
+        try{
+            jsonObject.put("lobbyId", lobbyId);
+        }catch (JSONException e){
+            Log.e("JOINLOBBY", e.getMessage());
+        }
+        ClientSocket.emit("joinLobby", jsonObject);
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        ClientSocket.on("createLobby", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject data = (JSONObject) args[0];
+                Intent intent = new Intent(getContext(), PreLobby.class);
+                try {
+                    intent.putExtra("lobbyId", data.getString("lobbyId"));
+                    startActivity(intent);
+                    Log.d("HomeFragment", "Lobby created: " + data.getString("lobbyId"));
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
+        });
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        ClientSocket.off("createLobby");
     }
 
 }
