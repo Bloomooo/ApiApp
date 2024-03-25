@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -18,9 +20,11 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.api.projet.AnimeListData;
 import com.api.projet.R;
 import com.api.projet.adapter.LobbyAdapter;
 import com.api.projet.databinding.FragmentHomeBinding;
+import com.api.projet.entity.Anime;
 import com.api.projet.entity.Lobby;
 import com.api.projet.inter.ApiService;
 import com.api.projet.inter.IntentInterface;
@@ -29,6 +33,7 @@ import com.api.projet.ui.game.PreLobby;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -95,8 +100,17 @@ public class HomeFragment extends Fragment implements IntentInterface {
                         public void onClick(DialogInterface dialog, int which) {
                             EditText lobbyNameEditText = dialogView.findViewById(R.id.lobbyNameEditText);
                             String lobbyName = lobbyNameEditText.getText().toString();
+                            RadioGroup radioGroup = dialogView.findViewById(R.id.radioGroup);
+                            int selectedRadioButtonId = radioGroup.getCheckedRadioButtonId();
+                            String selectedValue = "";
+                            if (selectedRadioButtonId != -1) {
+                                RadioButton selectedRadioButton = dialogView.findViewById(selectedRadioButtonId);
+                                selectedValue = selectedRadioButton.getText().toString();
 
-                            createLobby(lobbyName);
+                            } else {
+                                Log.d("SelectedRadioButton", "No radio button selected");
+                            }
+                            createLobby(lobbyName, selectedValue);
                         }
                     })
                     .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
@@ -112,10 +126,19 @@ public class HomeFragment extends Fragment implements IntentInterface {
 
     }
 
-    private void createLobby(String name){
+    private void createLobby(String name, String nb){
         JSONObject lobbyDetails = new JSONObject();
+        JSONArray animeJsonArray = new JSONArray();
         try {
             lobbyDetails.put("name", name);
+            lobbyDetails.put("nb", nb);
+            for(Anime anime: AnimeListData.getAnimeList()){
+                JSONObject animeObject = new JSONObject();
+                animeObject.put("title", anime.getTitle());
+                animeObject.put("image", anime.getImageUri());
+                animeJsonArray.put(animeObject);
+            }
+            lobbyDetails.put("animeList", animeJsonArray);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -142,8 +165,16 @@ public class HomeFragment extends Fragment implements IntentInterface {
     }
     private void joinLobby(String lobbyId){
         JSONObject jsonObject = new JSONObject();
+        JSONArray animeJsonArray = new JSONArray();
         try{
             jsonObject.put("lobbyId", lobbyId);
+            for(Anime anime: AnimeListData.getAnimeList()){
+                JSONObject animeObject = new JSONObject();
+                animeObject.put("title", anime.getTitle());
+                animeObject.put("image", anime.getImageUri());
+                animeJsonArray.put(animeObject);
+            }
+            jsonObject.put("animeList", animeJsonArray);
         }catch (JSONException e){
             Log.e("JOINLOBBY", e.getMessage());
         }

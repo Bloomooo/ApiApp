@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
@@ -14,9 +15,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.api.projet.AnimeListData;
 import com.api.projet.R;
 import com.api.projet.adapter.PreLobbyAdapter;
 import com.api.projet.backend.DatabaseQuery;
+import com.api.projet.entity.Anime;
 import com.api.projet.entity.Lobby;
 import com.api.projet.entity.Player;
 import com.api.projet.entity.User;
@@ -88,6 +91,7 @@ public class PreLobby extends AppCompatActivity {
             for(Player player : playerList){
                 if(host.getId().equals(player.getId()) && host.getName().equals(player.getName())){
                     this.buttonStart = findViewById(R.id.startButton);
+                    this.buttonStart.setVisibility(View.VISIBLE);
                     initListener();
                 }
             }
@@ -96,6 +100,7 @@ public class PreLobby extends AppCompatActivity {
 
     private void initListener(){
         this.buttonStart.setOnClickListener(v -> {
+            sendAnimeList();
             Intent intent = new Intent(PreLobby.this, Game.class);
             startActivity(intent);
         });
@@ -139,4 +144,31 @@ public class PreLobby extends AppCompatActivity {
             }
         });
     }
+
+    private void sendAnimeList() {
+        JSONArray animeArrayJson = new JSONArray();
+
+        JSONObject lobbyIdJson = new JSONObject();
+        try {
+            lobbyIdJson.put("lobbyId", lobbyId);
+        } catch (JSONException e) {
+            Log.e("JSONEXCEPTION", e.getMessage());
+        }
+        animeArrayJson.put(lobbyIdJson);
+
+        for (Anime anime : AnimeListData.getAnimeList()) {
+            JSONObject animeJson = new JSONObject();
+            try {
+                animeJson.put("title", anime.getTitle());
+                animeJson.put("image", anime.getImageUri());
+                animeArrayJson.put(animeJson);
+            } catch (JSONException e) {
+                Log.e("JSONEXCEPTION", e.getMessage());
+            }
+        }
+
+        ClientSocket.emitJsonArray("sendAnimeList", animeArrayJson);
+    }
+
+
 }
