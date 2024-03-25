@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.api.projet.entity.User;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -67,6 +68,15 @@ public class ClientSocket {
     }
 
     public static void emit(String event, JSONObject data) {
+        if (mSocket != null && mSocket.connected()) {
+            Log.d("ClientSocket", "Emitting event: " + event + " with data: " + data.toString());
+            mSocket.emit(event, data);
+        } else {
+            Log.e("ClientSocket", "Socket not connected or null");
+        }
+    }
+
+    public static void emitJsonArray(String event, JSONArray data) {
         if (mSocket != null && mSocket.connected()) {
             Log.d("ClientSocket", "Emitting event: " + event + " with data: " + data.toString());
             mSocket.emit(event, data);
