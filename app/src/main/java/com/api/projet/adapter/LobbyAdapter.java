@@ -94,6 +94,16 @@ public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.ViewHolder> 
             notifyDataSetChanged();
     }
 
+    public void onLobbyRemoved(String lobbyId) {
+        for (int i = 0; i < lobbyList.size(); i++) {
+            if (lobbyList.get(i).getId().equals(lobbyId)) {
+                lobbyList.remove(i);
+                notifyItemRemoved(i);
+                return;
+            }
+        }
+    }
+
 
 
 

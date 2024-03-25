@@ -178,6 +178,21 @@ public class HomeFragment extends Fragment implements IntentInterface {
                 });
             }
         });
+
+        ClientSocket.on("removeLobby", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject data = (JSONObject) args[0];
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        HomeViewModel homeViewModel =
+                                new ViewModelProvider(HomeFragment.this).get(HomeViewModel.class);
+                        setupLiveDataObservers(homeViewModel);
+                    }
+                });
+            }
+        });
     }
 
 

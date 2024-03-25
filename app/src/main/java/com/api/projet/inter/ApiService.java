@@ -10,6 +10,9 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 
 public interface ApiService {
-    @POST("joinLobby")
+    @POST("createLobby")
     Call<Void> createLobby(@Body RequestBody requestBody);
+
+    @POST("joinLobby")
+    Call<Void> joinLobby(@Body RequestBody requestBody);
 }

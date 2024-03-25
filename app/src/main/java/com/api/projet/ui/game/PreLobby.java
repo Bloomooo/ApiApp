@@ -96,8 +96,8 @@ public class PreLobby extends AppCompatActivity {
 
     private void initListener(){
         this.buttonStart.setOnClickListener(v -> {
-            //Intent intent = new Intent(PreLobby.this, Game.class);
-            //startActivity(intent);
+            Intent intent = new Intent(PreLobby.this, Game.class);
+            startActivity(intent);
         });
         this.buttonExit.setOnClickListener(v->{
             JSONObject data = new JSONObject();
