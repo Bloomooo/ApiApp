@@ -100,7 +100,7 @@ public class PreLobby extends AppCompatActivity {
 
     private void initListener(){
         this.buttonStart.setOnClickListener(v -> {
-            sendAnimeList();
+            startGame();
             Intent intent = new Intent(PreLobby.this, Game.class);
             startActivity(intent);
         });
@@ -129,6 +129,13 @@ public class PreLobby extends AppCompatActivity {
                 updateData();
             }
         });
+        ClientSocket.on("gameStarted", args->{
+            if(args != null){
+                Intent intent = new Intent(PreLobby.this, Game.class);
+                Log.i("l'intent",  "lintentmacrhraepjaaopsopa" );
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -145,29 +152,16 @@ public class PreLobby extends AppCompatActivity {
         });
     }
 
-    private void sendAnimeList() {
-        JSONArray animeArrayJson = new JSONArray();
+    private void startGame() {
+        JSONObject jsonObject = new JSONObject();
 
-        JSONObject lobbyIdJson = new JSONObject();
         try {
-            lobbyIdJson.put("lobbyId", lobbyId);
+            jsonObject.put("lobbyId", lobbyId);
+
         } catch (JSONException e) {
-            Log.e("JSONEXCEPTION", e.getMessage());
+            throw new RuntimeException(e);
         }
-        animeArrayJson.put(lobbyIdJson);
-
-        for (Anime anime : AnimeListData.getAnimeList()) {
-            JSONObject animeJson = new JSONObject();
-            try {
-                animeJson.put("title", anime.getTitle());
-                animeJson.put("image", anime.getImageUri());
-                animeArrayJson.put(animeJson);
-            } catch (JSONException e) {
-                Log.e("JSONEXCEPTION", e.getMessage());
-            }
-        }
-
-        ClientSocket.emitJsonArray("sendAnimeList", animeArrayJson);
+        ClientSocket.emit("startGame", jsonObject);
     }
 
 
