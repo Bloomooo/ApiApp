@@ -1,4 +1,4 @@
-package com.api.projet;
+package com.api.projet.model;
 
 import android.os.Bundle;
 import android.util.Log;

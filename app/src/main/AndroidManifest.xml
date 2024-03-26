@@ -16,6 +16,9 @@
         android:theme="@style/Theme.Yanisenzoprojetapi"
         tools:targetApi="31">
         <activity
+            android:name=".AnimeDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.animedetail.animeDetails"
             android:exported="false" />
         <activity

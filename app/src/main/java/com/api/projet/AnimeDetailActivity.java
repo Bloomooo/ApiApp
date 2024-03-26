@@ -1,33 +1,66 @@
-package com.api.projet.ui.animedetails;
+package com.api.projet;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import androidx.lifecycle.ViewModel;
-
-import com.api.projet.backend.ConnexionAPI;
-import com.api.projet.entity.Anime;
+import com.api.projet.adapter.AdapterAnimeImg;
 import com.api.projet.entity.AnimeDetailed;
-import com.api.projet.inter.AnimeCallBackInterface;
+
+import java.net.HttpURLConnection;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
-public class AnimeDetailsViewModel extends ViewModel implements AnimeCallBackInterface {
+import com.api.projet.backend.ConnexionAPI;
+import com.api.projet.inter.AnimeCallBackInterface;
+import com.api.projet.itemDecoration.SpaceItemDecoration;
+import com.squareup.picasso.Picasso;
+
+public class AnimeDetailActivity extends AppCompatActivity implements AnimeCallBackInterface {
     private String client_id;
     private String URL;
     private HttpURLConnection httpURLConnection;
-    AnimeDetailsViewModel(){
+    private AnimeDetailed animeDetailed;
+
+    private RecyclerView recyclerView;
+    private AdapterAnimeImg adapter;
+
+    private TextView animeTitle;
+    private TextView animeTitleJp;
+    private TextView description;
+    private TextView dateDebut;
+    private TextView dateFin;
+    private TextView noteMoy;
+    private TextView rank;
+    private TextView popularity;
+    private TextView genres;
+    private TextView status;
+    private TextView ep;
+
+    private ImageView imgAnime;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_anime_detail);
         ConnexionAPI conn = ConnexionAPI.getInstance();
         client_id = conn.getClient_id();
         URL = "https://api.myanimelist.net/v2/anime/#" +
@@ -38,10 +71,55 @@ public class AnimeDetailsViewModel extends ViewModel implements AnimeCallBackInt
                 "num_episodes,start_season,broadcast,source,average_episode_duration," +
                 "rating,pictures,background,related_anime,related_manga,recommendations," +
                 "studios,statistics";
+        Intent intent = getIntent();
+        int animeId = intent.getIntExtra("id",0);
+        initcomponents();
+        loadInfoAnime(animeId);
+    }
+
+    private void initcomponents(){
+        recyclerView = findViewById(R.id.recyclerViewAnimeDetailed);
+
+        // 2. Créez une instance de votre AdapterAnimeImg
+        List<String> urls = new ArrayList<>();
+        adapter = new AdapterAnimeImg(urls);
+
+        // 3. Configurez votre RecyclerView pour utiliser votre adaptateur
+        recyclerView.setAdapter(adapter);
+
+        // 4. Définissez le gestionnaire de disposition de votre RecyclerView
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new SpaceItemDecoration(8));
+
+        animeTitle = findViewById(R.id.textViewTitle);
+        animeTitleJp = findViewById(R.id.textViewTitlejp);
+        description = findViewById(R.id.textViewDescription);
+        dateDebut = findViewById(R.id.textViewStartDateValue);
+        dateFin = findViewById(R.id.textViewEndDateValue);
+        noteMoy = findViewById(R.id.textViewNoteMoyValue);
+        rank = findViewById(R.id.textViewRankValue);
+        popularity = findViewById(R.id.textViewPopularityValue);
+        genres = findViewById(R.id.textViewGenresValue);
+        status = findViewById(R.id.textViewStatusValue);
+        ep = findViewById(R.id.textViewEpValue);
+        imgAnime = findViewById(R.id.imageViewAnime);
+
 
     }
 
-    public void loadInfoAnime(int animeId) {
+    private void showData(){
+        adapter.setListeURL(animeDetailed.getPictures());
+        adapter.notifyDataSetChanged();
+
+        animeTitle.setText(animeDetailed.getTitle());
+        animeTitleJp.setText(animeDetailed.getTitleJp());
+        description.setText(animeDetailed.getSynopsis());
+
+        Picasso.get().load(animeDetailed.getImageUri()).into(imgAnime);
+    }
+
+
+    private void loadInfoAnime(int animeId) {
         AsyncTask<Void, Void, AnimeDetailed> apiTask = new AsyncTask<Void, Void, AnimeDetailed>(){
             @Override
             protected AnimeDetailed doInBackground(Void... voids) {
@@ -82,7 +160,7 @@ public class AnimeDetailsViewModel extends ViewModel implements AnimeCallBackInt
                         JSONArray genresArray = jsonResponse.getJSONArray("genres");
                         List<String> genres = new ArrayList<>();
                         for (int i = 0; i < genresArray.length(); i++) {
-                           genres.add(genresArray.getJSONObject(i).getString("name"));
+                            genres.add(genresArray.getJSONObject(i).getString("name"));
                         }
                         String ep = jsonResponse.getString("num_episodes");
                         JSONArray picturesArray = jsonResponse.getJSONArray("pictures");
@@ -127,6 +205,9 @@ public class AnimeDetailsViewModel extends ViewModel implements AnimeCallBackInt
 
     @Override
     public void onSuccess(AnimeDetailed anime) {
+
         Log.i("anime: ", anime.toString());
+        animeDetailed = anime;
+        showData();
     }
 }
