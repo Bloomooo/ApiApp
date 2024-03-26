@@ -98,9 +98,7 @@ public class ConnexionViewModel extends ViewModel implements ListCallBackInterfa
 
                                 Anime animeEntity = new Anime(i, title, imageUri, score, status, epWatch);
                                 animeList.add(animeEntity);
-                                Log.i("Anime : ",animeEntity.toString());
                             }
-                            Log.i("test",animeList.toString());
                         }else{
                             Log.i("ERREUR","HTTP REQUEST NOT OK");
                         }

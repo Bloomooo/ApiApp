@@ -10,7 +10,7 @@
         android:id="@+id/tvTotalAnimeCount"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="1/100"
+        android:text="?"
         android:textSize="24sp"
         android:gravity="center"
         android:background="@drawable/rounded_corner_background"
@@ -48,7 +48,6 @@
         android:id="@+id/ivAnimeImage"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:src="@drawable/mafuyu"
         android:scaleType="fitCenter"
         android:elevation="8dp"
         app:layout_constraintDimensionRatio="H,16:9"
@@ -82,16 +81,19 @@
     <LinearLayout
         android:id="@+id/llPlayers"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp"
         app:layout_constraintTop_toBottomOf="@id/tilAnswer"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-        <include layout="@layout/player_item" />
-
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvPlayers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

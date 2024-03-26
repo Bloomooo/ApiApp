@@ -16,6 +16,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:label="@string/app_name"
             android:theme="@style/Theme.Yanisenzoprojetapi.NoActionBar">
             <intent-filter>
@@ -28,6 +29,7 @@
             android:name=".LoginMain"
             android:exported="true"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Yanisenzoprojetapi.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,6 +41,7 @@
             android:name=".SignUpMain"
             android:exported="true"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Yanisenzoprojetapi.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action" />
@@ -50,6 +53,7 @@
             android:name=".ui.game.PreLobby"
             android:exported="true"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Yanisenzoprojetapi.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action" />
@@ -61,6 +65,7 @@
             android:name=".ui.game.Game"
             android:exported="true"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Yanisenzoprojetapi.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action" />

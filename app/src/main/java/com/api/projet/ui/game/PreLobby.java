@@ -62,8 +62,6 @@ public class PreLobby extends AppCompatActivity {
         queryLobby();
     }
 
-
-
     private void initComponent(){
         this.db = DatabaseQuery.getInstance();
         this.playerList = new ArrayList<>();
@@ -101,8 +99,7 @@ public class PreLobby extends AppCompatActivity {
     private void initListener(){
         this.buttonStart.setOnClickListener(v -> {
             startGame();
-            Intent intent = new Intent(PreLobby.this, Game.class);
-            startActivity(intent);
+
         });
         this.buttonExit.setOnClickListener(v->{
             JSONObject data = new JSONObject();
@@ -132,6 +129,8 @@ public class PreLobby extends AppCompatActivity {
         ClientSocket.on("gameStarted", args->{
             if(args != null){
                 Intent intent = new Intent(PreLobby.this, Game.class);
+                Log.i("AFKFAIKOFZKOAOKFAZOPKFDOKPA", lobbyId);
+                intent.putExtra("lobbyId", lobbyId);
                 Log.i("l'intent",  "lintentmacrhraepjaaopsopa" );
                 startActivity(intent);
             }

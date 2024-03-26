@@ -33,7 +33,7 @@ public class ClientSocket {
         @Override
         protected Void doInBackground(Void... voids) {
             try {
-                mSocket = IO.socket("http://172.20.10.2:5500");
+                mSocket = IO.socket("http://10.192.115.26:5500");
             } catch (URISyntaxException e) {
                 Log.e("ClientSocket", "Erreur de syntaxe d'URI", e);
                 cancel(true);

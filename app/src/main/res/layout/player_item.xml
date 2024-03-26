@@ -26,10 +26,22 @@
         android:id="@+id/tvPlayerAnswer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Answer"
         android:textSize="16sp"
         android:background="#AAFFFFFF"
         android:textColor="#FF000000"
         android:padding="8dp"
         android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/pointPlayer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="0"
+        android:background="#AAFFFFFF"
+        android:textColor="#FF000000"
+        android:padding="8dp"
+        android:visibility="gone"/>
+
+
 </LinearLayout>
