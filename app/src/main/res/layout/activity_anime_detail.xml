@@ -101,6 +101,9 @@
         app:layout_constraintVertical_bias="0.0">
 
         <!-- Contenu de la CardView des dates -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -191,7 +194,7 @@
                 android:id="@+id/textViewRankLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Rank : #?"
+                android:text="Rank"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 android:textStyle="bold"
@@ -215,7 +218,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:text="Popularity : #?"
+                android:text="Popularity"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 android:textStyle="bold"
@@ -309,6 +312,7 @@
                 app:layout_constraintTop_toBottomOf="@id/textViewEpLabel" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView

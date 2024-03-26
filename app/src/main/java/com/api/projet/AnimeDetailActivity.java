@@ -105,6 +105,8 @@ public class AnimeDetailActivity extends AppCompatActivity implements AnimeCallB
         imgAnime = findViewById(R.id.imageViewAnime);
 
 
+
+
     }
 
     private void showData(){
@@ -114,6 +116,18 @@ public class AnimeDetailActivity extends AppCompatActivity implements AnimeCallB
         animeTitle.setText(animeDetailed.getTitle());
         animeTitleJp.setText(animeDetailed.getTitleJp());
         description.setText(animeDetailed.getSynopsis());
+        dateDebut.setText(animeDetailed.getStartDate());
+        dateFin.setText(animeDetailed.getEndDate());
+        noteMoy.setText(animeDetailed.getNoteMoy() + "⭐");
+        rank.setText("#"+animeDetailed.getRank());
+        popularity.setText("#"+animeDetailed.getPopularity());
+        status.setText(animeDetailed.getStatus().replace("_"," "));
+        ep.setText(animeDetailed.getEp());
+
+        String genreTxt = animeDetailed.getGenres().toString().replace("[","").replace("]","");
+
+        genres.setText(genreTxt);
+
 
         Picasso.get().load(animeDetailed.getImageUri()).into(imgAnime);
     }
