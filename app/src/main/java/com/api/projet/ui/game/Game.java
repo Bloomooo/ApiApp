@@ -71,8 +71,6 @@ public class Game extends AppCompatActivity implements GameInteraction {
 
     private AnimeSuggestionAdapter animeSuggestionAdapter;
 
-    private int point = 0;
-
     private String lobbyId;
 
     @Override
@@ -130,6 +128,23 @@ public class Game extends AppCompatActivity implements GameInteraction {
                             answerEditText.setText("");
                             answerEditText.setEnabled(false);
 
+                            if(index == length){
+                                answerQuizTextView.setText(answerQuizTextView.getText().toString() + "\nFin de la partie");
+                               new CountDownTimer(10000, 1000) {
+                                    @Override
+                                    public void onTick(long millisUntilFinished) {
+
+                                    }
+
+                                    @Override
+                                    public void onFinish() {
+                                        Intent intent = new Intent(Game.this, PreLobby.class);
+                                        intent.putExtra("lobbyId", lobbyId);
+                                        startActivity(intent);
+                                    }
+                                }.start();
+
+                            }
                         }
                     }.start();
                 });
@@ -170,6 +185,7 @@ public class Game extends AppCompatActivity implements GameInteraction {
             });
 
         });
+
 
     }
 
