@@ -128,8 +128,19 @@ public class PreLobby extends AppCompatActivity {
         });
         ClientSocket.on("gameStarted", args->{
             if (args != null && args.length > 0) {
-                ArrayList<Anime> animeList = (ArrayList<Anime>) args[0];
-                AnimeListData.setAnimeListLobby(animeList);
+                JSONArray data = (JSONArray) args[0];
+                List<String> suggestedAnimeList = new ArrayList<>();
+                for(int i = 0; i< data.length(); i++){
+                    try {
+                        JSONObject jsonObject = data.getJSONObject(i);
+                        String title = jsonObject.getString("title");
+                        suggestedAnimeList.add(title);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }
+                AnimeListData.setAnimeListLobby(suggestedAnimeList);
                 Intent intent = new Intent(PreLobby.this, Game.class);
                 intent.putExtra("lobbyId", lobbyId);
                 startActivity(intent);

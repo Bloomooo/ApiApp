@@ -183,9 +183,9 @@ public class Game extends AppCompatActivity implements GameInteraction {
     private void answerSuggestion(String query){
         if(!query.isEmpty()){
             List<String> answerSuggestionList = new ArrayList<>();
-            for(Anime anime : AnimeListData.getAnimeListLobby()){
-                if (anime.getTitle().toLowerCase().contains(query.toLowerCase())){
-                    answerSuggestionList.add(anime.getTitle());
+            for(String anime : AnimeListData.getAnimeListLobby()){
+                if (anime.toLowerCase().contains(query.toLowerCase())){
+                    answerSuggestionList.add(anime);
                 }
             }
             animeSuggestionAdapter.setData(answerSuggestionList);
