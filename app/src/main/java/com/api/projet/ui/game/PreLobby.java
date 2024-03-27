@@ -127,11 +127,11 @@ public class PreLobby extends AppCompatActivity {
             }
         });
         ClientSocket.on("gameStarted", args->{
-            if(args != null){
+            if (args != null && args.length > 0) {
+                ArrayList<Anime> animeList = (ArrayList<Anime>) args[0];
+                AnimeListData.setAnimeListLobby(animeList);
                 Intent intent = new Intent(PreLobby.this, Game.class);
-                Log.i("AFKFAIKOFZKOAOKFAZOPKFDOKPA", lobbyId);
                 intent.putExtra("lobbyId", lobbyId);
-                Log.i("l'intent",  "lintentmacrhraepjaaopsopa" );
                 startActivity(intent);
             }
         });

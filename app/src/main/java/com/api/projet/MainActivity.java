@@ -35,6 +35,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 import com.api.projet.databinding.ActivityMainBinding;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -76,7 +77,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         ConnexionViewModel conn = new ViewModelProvider(this).get(ConnexionViewModel.class);
-        conn.control("Ifourty");
+        Log.i("TESTSQTSTQ", FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        conn.control(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
     }
 
     @Override
