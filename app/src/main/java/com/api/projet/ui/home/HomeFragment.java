@@ -26,30 +26,19 @@ import com.api.projet.adapter.LobbyAdapter;
 import com.api.projet.databinding.FragmentHomeBinding;
 import com.api.projet.entity.Anime;
 import com.api.projet.entity.Lobby;
-import com.api.projet.inter.ApiService;
 import com.api.projet.inter.IntentInterface;
 import com.api.projet.network.client.ClientSocket;
 import com.api.projet.ui.game.PreLobby;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import io.socket.emitter.Emitter;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HomeFragment extends Fragment implements IntentInterface {
 
