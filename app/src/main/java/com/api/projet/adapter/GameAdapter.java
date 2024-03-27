@@ -42,6 +42,14 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> im
         this.holder = holder;
         Player player = playerList.get(position);
         holder.nameTextViewPlayer.setText(player.getName());
+        holder.pointPlayer.setText(String.valueOf(player.getScore()));
+        if (player.getAnswer() != null && !player.getAnswer().isEmpty()) {
+            holder.playerAnswerTextView.setText(player.getAnswer());
+            holder.playerAnswerTextView.setVisibility(View.VISIBLE);
+        } else {
+            holder.playerAnswerTextView.setVisibility(View.GONE);
+        }
+        holder.itemView.setBackgroundColor(player.getColor());
     }
 
     @Override

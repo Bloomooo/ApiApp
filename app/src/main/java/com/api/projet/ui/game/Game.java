@@ -34,6 +34,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -72,6 +73,8 @@ public class Game extends AppCompatActivity implements GameInteraction {
 
     private int point = 0;
 
+    private String lobbyId;
+
     @Override
     public void onCreate(Bundle bundle){
         super.onCreate(bundle);
@@ -92,10 +95,13 @@ public class Game extends AppCompatActivity implements GameInteraction {
                 String index = jsonObject.getString("index");
                 Log.i("GGEZEZEZAEAEORZAOKF2AOKF",title);
                 runOnUiThread(() -> {
-                    gameAdapter.disableAnswerViewText();
                     compteurTextView.setText(index+"/"+length);
                     Picasso.get().load(imageUriString).into(animeImageView);
-                    gameAdapter.setBackgroundColor(Color.WHITE);
+                    for(Player player: playerList){
+                        player.setColor(Color.WHITE);
+                        player.setAnswer("");
+                    }
+                    gameAdapter.setData(playerList);
                     answerQuizTextView.setText("?");
                     answerEditText.setEnabled(true);
                     timerSeconds = 20;
@@ -109,14 +115,18 @@ public class Game extends AppCompatActivity implements GameInteraction {
 
                         public void onFinish() {
                             answerQuizTextView.setText(title);
-                            gameAdapter.enableAnswerViewText(answerEditText.getText().toString());
-                            if(answerEditText.getText().toString().toLowerCase().equals(title.toLowerCase())){
-                                point++;
-                                gameAdapter.setPoint(point);
-                                gameAdapter.setBackgroundColor(Color.GREEN);
-                            }else{
-                                gameAdapter.setBackgroundColor(Color.RED);
+
+                            JSONObject data = new JSONObject();
+                            try {
+                                data.put("lobbyId", lobbyId);
+                                data.put("username", FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                                data.put("answer", answerEditText.getText().toString());
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
                             }
+
+                            ClientSocket.emit("sendResults", data);
+
                             answerEditText.setText("");
                             answerEditText.setEnabled(false);
 
@@ -126,6 +136,39 @@ public class Game extends AppCompatActivity implements GameInteraction {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        });
+
+        ClientSocket.on("gameResults", args -> {
+            JSONArray jsonArray = (JSONArray) args[0];
+
+            for(int i = 0; i < jsonArray.length(); i++) {
+                try {
+                    JSONObject data = jsonArray.getJSONObject(i);
+                    String username = data.getString("username");
+                    String answer = data.getString("answer");
+                    boolean isCorrect = data.getBoolean("isCorrect");
+                    for (Player player : playerList) {
+
+                        if (player.getName().equals(username)) {
+                            player.setAnswer(answer);
+                            if(isCorrect){
+                                player.setColor(Color.GREEN);
+                                player.setScore(player.getScore() + 1);
+                            }else{
+                                player.setColor(Color.RED);
+                            }
+
+
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            runOnUiThread(() -> {
+                gameAdapter.setData(playerList);
+            });
+
         });
 
     }
@@ -197,7 +240,7 @@ public class Game extends AppCompatActivity implements GameInteraction {
 
     private void loadPlayer(){
         Intent intent = getIntent();
-        String lobbyId = intent.getStringExtra("lobbyId");
+        lobbyId = intent.getStringExtra("lobbyId");
         db.getPlayers(lobbyId).addOnSuccessListener(playerList ->{
             this.playerList.clear();
             this.playerList.addAll(playerList);
