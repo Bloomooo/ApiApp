@@ -1,19 +1,53 @@
 package com.api.projet.ui.home;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class HomeViewModel extends ViewModel {
+import com.api.projet.backend.DatabaseQuery;
+import com.api.projet.entity.Lobby;
+import com.api.projet.inter.AnimeListObserver;
+import com.api.projet.inter.LobbyListObserver;
 
-    private final MutableLiveData<String> mText;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+public class HomeViewModel extends ViewModel implements LobbyListObserver {
+
+    private DatabaseQuery db;
+
+    private MutableLiveData<List<Lobby>> listLobby;
     public HomeViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+        this.db = DatabaseQuery.getInstance();
+        initComponent();
+        fetchLobbyData();
     }
 
-    public LiveData<String> getText() {
-        return mText;
+
+    public LiveData<List<Lobby>> getLobby(){
+        return listLobby;
+    }
+
+    private void initComponent(){
+        this.listLobby = new MutableLiveData<>();
+
+    }
+    private void fetchLobbyData() {
+        db.getLobby().addOnSuccessListener(lobbyList -> {
+            listLobby.setValue(lobbyList);
+        }).addOnFailureListener(e -> {
+            Log.e("HomeViewModel", "Failed to fetch lobby data: " + e.getMessage());
+        });
+    }
+    @Override
+    public void onLobbyListUpdated(List<Lobby> newLobbyList){
+        this.listLobby.setValue(newLobbyList);
+    }
+
+    public void update(){
+
     }
 }

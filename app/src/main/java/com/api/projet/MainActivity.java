@@ -6,9 +6,11 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.Toast;
 
 import com.api.projet.backend.ConnexionAPI;
 import com.api.projet.network.NetworkState;
+import com.api.projet.network.client.ClientSocket;
 import com.api.projet.ui.connexion.ConnexionViewModel;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
@@ -36,6 +38,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 import com.api.projet.databinding.ActivityMainBinding;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -52,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        if(!NetworkState.isConnected(this)){
+            Toast.makeText(this, "Aucune connexion Internet. Certaines fonctionnalités peuvent ne pas être disponibles.", Toast.LENGTH_LONG).show();
+        }
 
         setSupportActionBar(binding.appBarMain.toolbar);
         DrawerLayout drawer = binding.drawerLayout;
@@ -65,7 +71,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         ConnexionViewModel conn = new ViewModelProvider(this).get(ConnexionViewModel.class);
-        conn.control("Ifourty");
+        Log.i("TESTSQTSTQ", FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        conn.control(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
     }
 
     @Override

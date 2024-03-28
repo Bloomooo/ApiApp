@@ -23,6 +23,8 @@ public class AnimeListData {
     private static List<Anime> animeList = new ArrayList<>();
     private static List<AnimeListObserver> observers = new ArrayList<>();
 
+    private static List<String> animeListLobby = new ArrayList<>();
+
     public static void addObserver(AnimeListObserver observer) {
         observers.add(observer);
     }
@@ -45,5 +47,16 @@ public class AnimeListData {
 
     public static List<Anime> getAnimeList() {
         return animeList;
+    }
+
+    public static List<String> getAnimeListLobby(){
+        return animeListLobby;
+    }
+
+    public static void setAnimeListLobby(List<String> listLobby){
+        if(!animeListLobby.isEmpty()){
+            animeListLobby.clear();
+        }
+        animeListLobby.addAll(listLobby);
     }
 }
