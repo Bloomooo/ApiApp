@@ -1,10 +1,14 @@
 package com.api.projet;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.api.projet.backend.ConnexionAPI;
@@ -72,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         ConnexionViewModel conn = new ViewModelProvider(this).get(ConnexionViewModel.class);
         Log.i("TESTSQTSTQ", FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
         conn.control(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        initProfile();
     }
 
     @Override
@@ -85,6 +90,30 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    private void initProfile() {
+        View headerView = binding.navView.getHeaderView(0);
+
+        TextView pseudoTextView = headerView.findViewById(R.id.pseudoTextView);
+
+        String displayName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+        if (displayName != null) {
+            Log.i("PSEFJIIJAOAOP", displayName);
+            pseudoTextView.setText(displayName);
+            initListener(headerView);
+        }else{
+            Log.e("PSEUDODOODODODO", "CAOKAOKZOF MARCHE PASP DAPO");
+        }
+    }
+
+    private void initListener(View headerView){
+        ImageView logoutImageView = headerView.findViewById(R.id.logoutImageView);
+        logoutImageView.setOnClickListener(v->{
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(MainActivity.this, LoginMain.class);
+            startActivity(intent);
+        });
     }
 
 }
