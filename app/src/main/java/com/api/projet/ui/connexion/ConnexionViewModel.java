@@ -5,7 +5,7 @@ import android.util.Log;
 
 import androidx.lifecycle.ViewModel;
 
-import com.api.projet.AnimeListData;
+import com.api.projet.model.AnimeListData;
 import com.api.projet.backend.ConnexionAPI;
 import com.api.projet.entity.Anime;
 import com.api.projet.inter.ListCallBackInterface;
@@ -22,8 +22,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.github.cdimascio.dotenv.Dotenv;
 
 public class ConnexionViewModel extends ViewModel implements ListCallBackInterface {
 
@@ -90,13 +88,14 @@ public class ConnexionViewModel extends ViewModel implements ListCallBackInterfa
                                 JSONObject node = anime.getJSONObject("node");
                                 JSONObject listStatus = anime.getJSONObject("list_status");
                                 JSONObject image = node.getJSONObject("main_picture");
+                                int id = node.getInt("id");
                                 String title = node.getString("title");
                                 String status = listStatus.getString("status");
                                 int score = listStatus.getInt("score");
                                 String imageUri = image.getString("medium");
                                 int epWatch = listStatus.getInt("num_episodes_watched");
 
-                                Anime animeEntity = new Anime(i, title, imageUri, score, status, epWatch);
+                                Anime animeEntity = new Anime(id, title, imageUri, score, status, epWatch);
                                 animeList.add(animeEntity);
                             }
                         }else{

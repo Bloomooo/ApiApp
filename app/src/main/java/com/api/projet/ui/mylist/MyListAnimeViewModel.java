@@ -1,12 +1,17 @@
 package com.api.projet.ui.mylist;
 
-import android.util.Log;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.MotionEvent;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.api.projet.AnimeListData;
+import com.api.projet.AnimeDetailActivity;
+import com.api.projet.model.AnimeListData;
 import com.api.projet.entity.Anime;
 import com.api.projet.inter.AnimeListObserver;
 
@@ -48,4 +53,18 @@ public class MyListAnimeViewModel extends ViewModel implements AnimeListObserver
         }
         animeList.setValue(list);
     }
+
+    public void itemAction(@NonNull RecyclerView rv, @NonNull MotionEvent e){
+        int position = rv.getChildAdapterPosition(rv.findChildViewUnder(e.getX(), e.getY()));
+        Anime animeClicked = animeList.getValue().get(position);
+
+        Intent intent = new Intent(rv.getContext(), AnimeDetailActivity.class);
+        intent.putExtra("id",animeClicked.getId());
+
+        rv.getContext().startActivity(intent);
+
+
+
+    }
+
 }

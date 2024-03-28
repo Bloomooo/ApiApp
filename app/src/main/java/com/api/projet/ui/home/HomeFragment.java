@@ -20,7 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.api.projet.AnimeListData;
+import com.api.projet.model.AnimeListData;
 import com.api.projet.R;
 import com.api.projet.adapter.LobbyAdapter;
 import com.api.projet.databinding.FragmentHomeBinding;
