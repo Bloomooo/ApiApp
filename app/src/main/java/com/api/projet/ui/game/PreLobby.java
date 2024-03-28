@@ -3,9 +3,12 @@ package com.api.projet.ui.game;
 import static android.app.PendingIntent.getActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -78,7 +81,7 @@ public class PreLobby extends AppCompatActivity {
         playerList.clear();
         db.getPlayers(lobbyId).addOnSuccessListener(playerList ->{
             this.playerList.addAll(playerList);
-            updateData();
+            loadIcon();
         }).addOnFailureListener(e ->{
             Log.e("Error getPlayer() ", e.getMessage());
         });
@@ -146,6 +149,31 @@ public class PreLobby extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        ClientSocket.on("imageDownloadResponse", args->{
+            new Handler(Looper.getMainLooper()).post(() -> {
+                try{
+                    JSONObject data = (JSONObject) args[0];
+                    String name = data.getString("name");
+                    String imageBase64 = data.getString("imageBase64");
+                    byte[] decodedString = Base64.decode(imageBase64, Base64.DEFAULT);
+                    Bitmap decodedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                    boolean updated = false;
+                    for (Player player : playerList){
+                        if(player.getName().equals(name)){
+                            player.setImageBase64(decodedBitmap);
+                            updated = true;
+                        }
+                    }
+                    if (updated) {
+                        updateData();
+                    }
+                }catch (JSONException e){
+                    Log.e("ERREUR JSON", e.getMessage());
+                }
+            });
+        });
+
     }
 
     @Override
@@ -153,7 +181,24 @@ public class PreLobby extends AppCompatActivity {
         super.onStop();
         ClientSocket.off("updatePlayersList");
     }
+
+    private void loadIcon(){
+        for(Player player: playerList){
+            if(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl() != null){
+                try{
+                    JSONObject data = new JSONObject();
+                    data.put("name", player.getName());
+                    ClientSocket.emit("downloadImage", data);
+                }catch (JSONException e){
+                    Log.e("ERREUR JSON", e.getMessage());
+                }
+            }
+        }
+
+    }
     private void updateData(){
+
+
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {

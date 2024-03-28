@@ -1,5 +1,6 @@
 package com.api.projet.entity;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
 
 public class Player {
@@ -9,12 +10,15 @@ public class Player {
     private String answer;
     private int color;
 
+    private Bitmap imageBase64;
+
     public Player(Long id, String name) {
         this.id = id;
         this.name = name;
         this.score = 0;
         this.answer = "";
         this.color = Color.WHITE;
+        this.imageBase64 = null;
     }
 
     public Long getId() {
@@ -55,5 +59,13 @@ public class Player {
 
     public void setColor(int color) {
         this.color = color;
+    }
+
+    public Bitmap getImageBase64(){
+        return this.imageBase64;
+    }
+
+    public void setImageBase64(Bitmap imageBase64){
+        this.imageBase64 = imageBase64;
     }
 }

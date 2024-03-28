@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -38,7 +39,11 @@ public class PreLobbyAdapter extends RecyclerView.Adapter<PreLobbyAdapter.ViewHo
         public void onBindViewHolder(@NonNull com.api.projet.adapter.PreLobbyAdapter.ViewHolder holder, int position) {
             Player player = playerList.get(position);
             holder.nameTextViewPlayer.setText(player.getName());
-
+            if(player.getImageBase64() != null){
+                holder.photoImageView.setImageBitmap(player.getImageBase64());
+            }else{
+                holder.photoImageView.setImageResource(R.drawable.ic_menu_profil);
+            }
         }
 
         @Override
@@ -49,9 +54,11 @@ public class PreLobbyAdapter extends RecyclerView.Adapter<PreLobbyAdapter.ViewHo
         public static class ViewHolder extends RecyclerView.ViewHolder {
             TextView nameTextViewPlayer;
 
+            ImageView photoImageView;
             public ViewHolder(View itemView) {
                 super(itemView);
                 nameTextViewPlayer = itemView.findViewById(R.id.nameTextViewPlayer);
+                photoImageView = itemView.findViewById(R.id.ivPlayerIcon);
             }
         }
 
