@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
@@ -49,6 +50,11 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> im
         } else {
             holder.playerAnswerTextView.setVisibility(View.GONE);
         }
+        if(player.getImageBase64() != null){
+            holder.photoImageView.setImageBitmap(player.getImageBase64());
+        }else{
+            holder.photoImageView.setImageResource(R.drawable.ic_menu_profil);
+        }
         holder.itemView.setBackgroundColor(player.getColor());
     }
 
@@ -84,12 +90,14 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> im
 
         TextView playerAnswerTextView;
 
+        ImageView photoImageView;
         public ViewHolder(View itemView) {
             super(itemView);
             nameTextViewPlayer = itemView.findViewById(R.id.nameTextViewPlayer);
             playerAnswerTextView = itemView.findViewById(R.id.tvPlayerAnswer);
             pointPlayer = itemView.findViewById(R.id.pointPlayer);
             pointPlayer.setVisibility(View.VISIBLE);
+            photoImageView = itemView.findViewById(R.id.ivPlayerIcon);
         }
     }
 

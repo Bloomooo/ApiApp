@@ -7,8 +7,7 @@
     <ImageView
         android:id="@+id/ivPlayerIcon"
         android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:src="@drawable/mafuyu" />
+        android:layout_height="48dp" />
 
     <TextView
         android:id="@+id/nameTextViewPlayer"
