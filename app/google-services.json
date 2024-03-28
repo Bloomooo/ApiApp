@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "858237056257",
+    "project_id": "palapp-ef20f",
+    "storage_bucket": "palapp-ef20f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:858237056257:android:3b9e7d3a92414e94c69700",
+        "android_client_info": {
+          "package_name": "com.api.projet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1Gxy-PpGH02g7-wk8iaHp9CE3KAvFUK4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

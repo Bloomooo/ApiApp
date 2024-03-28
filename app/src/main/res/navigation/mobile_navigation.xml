@@ -13,13 +13,19 @@
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.api.projet.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:name="com.api.projet.ui.mylist.MyListAnimeFragment"
+        android:label="@string/menu_mylist"
+        tools:layout="@layout/fragment_mylist_anime" />
 
     <fragment
         android:id="@+id/nav_slideshow"
         android:name="com.api.projet.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
+
+    <fragment
+        android:id="@+id/nav_anime_details"
+        android:name="com.api.projet.ui.animedetails.AnimeDetailsFragment"
+        android:label="Anime Detail"
+        tools:layout="@layout/fragment_anime_details" />
 </navigation>

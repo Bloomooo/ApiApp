@@ -16,3 +16,10 @@ gradle-app.setting
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
+app/src/main/java/.env
+app/src/main/java/com/api/projet/.env.local
+app/src/main/java/com/api/projet/backend/ConnexionAPI.java
+local.properties
+.idea/appInsightsSettings.xml
+.idea/deploymentTargetDropDown.xml
+.idea/deploymentTargetDropDown.xml
