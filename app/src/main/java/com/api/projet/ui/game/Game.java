@@ -46,34 +46,79 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Activity for managing the gameplay within a lobby.
+ */
 public class Game extends AppCompatActivity implements GameInteraction {
 
+    /**
+     * TextView to display the count of anime being displayed.
+     */
     private TextView compteurTextView;
 
+    /**
+     * TextView to display the correct answer for the quiz.
+     */
     private TextView answerQuizTextView;
 
+    /**
+     * TextView to display the countdown timer.
+     */
     private TextView timerTextView;
 
-
+    /**
+     * ImageView to display the anime image.
+     */
     private ImageView animeImageView;
 
+    /**
+     * EditText to input the user's answer for the quiz.
+     */
     private EditText answerEditText;
 
+    /**
+     * CountDownTimer for the quiz timer.
+     */
     private CountDownTimer timer;
 
+    /**
+     * Instance of DatabaseQuery for database operations.
+     */
     private DatabaseQuery db;
 
+    /**
+     * Number of seconds for the countdown timer.
+     */
     private long timerSeconds = 20;
 
+    /**
+     * List of players in the lobby.
+     */
     private List<Player> playerList;
 
+    /**
+     * RecyclerView for displaying players.
+     */
     private RecyclerView recyclerViewPlayer;
+
+    /**
+     * RecyclerView for displaying anime suggestions.
+     */
     private RecyclerView recyclerViewSuggestion;
 
+    /**
+     * Adapter for the player RecyclerView.
+     */
     private GameAdapter gameAdapter;
 
+    /**
+     * Adapter for the anime suggestion RecyclerView.
+     */
     private AnimeSuggestionAdapter animeSuggestionAdapter;
 
+    /**
+     * Unique identifier for the lobby.
+     */
     private String lobbyId;
 
     @Override
@@ -83,6 +128,7 @@ public class Game extends AppCompatActivity implements GameInteraction {
         initComponent();
         loadPlayer();
     }
+
     @Override
     public void onStart(){
         super.onStart();
@@ -133,7 +179,7 @@ public class Game extends AppCompatActivity implements GameInteraction {
 
                             if(index == length){
                                 answerQuizTextView.setText(answerQuizTextView.getText().toString() + "\nFin de la partie");
-                               new CountDownTimer(10000, 1000) {
+                                new CountDownTimer(10000, 1000) {
                                     @Override
                                     public void onTick(long millisUntilFinished) {
 
@@ -215,6 +261,9 @@ public class Game extends AppCompatActivity implements GameInteraction {
 
     }
 
+    /**
+     * Loads the icon for each player in the lobby.
+     */
     private void loadIcon(){
         for(Player player: playerList){
             if(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl() != null){
@@ -229,6 +278,10 @@ public class Game extends AppCompatActivity implements GameInteraction {
         }
 
     }
+
+    /**
+     * Updates the player data in the UI.
+     */
     private void updateData(){
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
@@ -237,6 +290,10 @@ public class Game extends AppCompatActivity implements GameInteraction {
             }
         });
     }
+
+    /**
+     * Initializes the components of the activity.
+     */
     private void initComponent(){
         this.db = DatabaseQuery.getInstance();
         TextInputLayout tilAnswer = findViewById(R.id.tilAnswer);
@@ -257,6 +314,9 @@ public class Game extends AppCompatActivity implements GameInteraction {
         this.recyclerViewSuggestion.setAdapter(animeSuggestionAdapter);
     }
 
+    /**
+     * Searches for suggestions based on the user's answer input.
+     */
     private void searchAnswer(){
         if (this.answerEditText != null) {
             this.answerEditText.addTextChangedListener(new TextWatcher() {
@@ -279,6 +339,10 @@ public class Game extends AppCompatActivity implements GameInteraction {
         }
     }
 
+    /**
+     * Displays answer suggestions based on the user's input.
+     * @param query The user's input.
+     */
     private void answerSuggestion(String query){
         if(!query.isEmpty()){
             List<String> answerSuggestionList = new ArrayList<>();
@@ -294,6 +358,9 @@ public class Game extends AppCompatActivity implements GameInteraction {
 
     }
 
+    /**
+     * Loads the player data from the database.
+     */
     private void loadPlayer(){
         Intent intent = getIntent();
         lobbyId = intent.getStringExtra("lobbyId");

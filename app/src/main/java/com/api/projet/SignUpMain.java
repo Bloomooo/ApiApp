@@ -21,17 +21,22 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
+/**
+ * Activité gérant l'inscription des utilisateurs.
+ */
 public class SignUpMain extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
-    private EditText emailEditText;
+    private FirebaseAuth mAuth; // Instance de FirebaseAuth pour gérer l'authentification
+    private EditText emailEditText; // Champ de texte pour l'adresse e-mail
+    private EditText passwordEditText; // Champ de texte pour le mot de passe
+    private EditText usernameEditText; // Champ de texte pour le nom d'utilisateur
+    private Button signUpButton; // Bouton pour l'inscription
 
-    private EditText passwordEditText;
-
-    private EditText usernameEditText;
-
-    private Button signUpButton;
-
+    /**
+     * Méthode onCreate, appelée lors de la création de l'activité.
+     * Initialise les composants de l'interface utilisateur et les écouteurs d'événements.
+     * @param bundle Un objet Bundle qui contient des données potentiellement fournies à l'activité lors de sa création.
+     */
     @Override
     public void onCreate(Bundle bundle){
         super.onCreate(bundle);
@@ -42,9 +47,11 @@ public class SignUpMain extends AppCompatActivity {
             initComponent();
             initListener(signUpButton);
         }
-
     }
 
+    /**
+     * Initialise les composants de l'interface utilisateur.
+     */
     private void initComponent(){
         this.mAuth = FirebaseAuth.getInstance();
         this.emailEditText = findViewById(R.id.emailSignUp);
@@ -53,6 +60,10 @@ public class SignUpMain extends AppCompatActivity {
         this.signUpButton = findViewById(R.id.signupButton);
     }
 
+    /**
+     * Initialise les écouteurs d'événements pour les boutons.
+     * @param signUpButton Le bouton d'inscription
+     */
     private void initListener(Button signUpButton){
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,13 +74,18 @@ public class SignUpMain extends AppCompatActivity {
                 if(isValidEmail(email)){
                     createUser(email, password, username);
                 }else{
-                    Toast.makeText(SignUpMain.this, "Invalid format email !", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUpMain.this, "Format d'email invalide !", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
     }
 
+    /**
+     * Crée un nouvel utilisateur avec l'adresse email et le mot de passe fournis.
+     * @param email L'adresse email de l'utilisateur
+     * @param password Le mot de passe de l'utilisateur
+     * @param username Le nom d'utilisateur de l'utilisateur
+     */
     private void createUser(String email, String password, String username){
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -81,18 +97,24 @@ public class SignUpMain extends AppCompatActivity {
                                     .setDisplayName(username)
                                     .build();
                             user.updateProfile(profileUpdates);
-                            Toast.makeText(SignUpMain.this, "Authentication successful.",
+                            Toast.makeText(SignUpMain.this, "Authentification réussie.",
                                     Toast.LENGTH_SHORT).show();
                             ClientSocket.connectToServer(new User(username));
                             Intent mainIntent = new Intent(SignUpMain.this, MainActivity.class);
                             startActivity(mainIntent);
                         } else {
-                            Toast.makeText(SignUpMain.this, "Authentication failed.",
+                            Toast.makeText(SignUpMain.this, "Échec de l'authentification.",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
+
+    /**
+     * Vérifie si une adresse email est valide.
+     * @param target L'adresse email à vérifier
+     * @return true si l'adresse email est valide, sinon false
+     */
     private boolean isValidEmail(CharSequence target) {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }

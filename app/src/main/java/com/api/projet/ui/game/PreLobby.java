@@ -39,20 +39,32 @@ import java.util.List;
 
 import io.socket.emitter.Emitter;
 
+/**
+ * Activity for managing the pre-lobby state before starting a game.
+ */
 public class PreLobby extends AppCompatActivity {
 
+    /** Instance of the database query class. */
     private DatabaseQuery db;
 
+    /** RecyclerView for displaying player information. */
     private RecyclerView recyclerView;
 
+    /** Adapter for the RecyclerView. */
     private PreLobbyAdapter preLobbyAdapter;
 
+    /** List of players in the lobby. */
     private List<Player> playerList;
 
+    /** ID of the lobby. */
     private String lobbyId;
+
+    /** Button to start the game. */
     private Button buttonStart;
 
+    /** Button to exit the pre-lobby. */
     private ImageButton buttonExit;
+
     @Override
     public void onCreate(Bundle bundle){
         super.onCreate(bundle);
@@ -65,6 +77,9 @@ public class PreLobby extends AppCompatActivity {
         queryLobby();
     }
 
+    /**
+     * Initializes the components of the activity.
+     */
     private void initComponent(){
         this.db = DatabaseQuery.getInstance();
         this.playerList = new ArrayList<>();
@@ -77,6 +92,9 @@ public class PreLobby extends AppCompatActivity {
         lobbyId = intent.getStringExtra("lobbyId");
     }
 
+    /**
+     * Queries the database for player information.
+     */
     private void queryPlayer(){
         playerList.clear();
         db.getPlayers(lobbyId).addOnSuccessListener(playerList ->{
@@ -87,6 +105,9 @@ public class PreLobby extends AppCompatActivity {
         });
     }
 
+    /**
+     * Queries the database for lobby information.
+     */
     private void queryLobby(){
         db.foundHostLobbyById(lobbyId).addOnSuccessListener(host->{
             for(Player player : playerList){
@@ -99,6 +120,9 @@ public class PreLobby extends AppCompatActivity {
         });
     }
 
+    /**
+     * Initializes the click listeners for buttons.
+     */
     private void initListener(){
         this.buttonStart.setOnClickListener(v -> {
             startGame();
@@ -182,6 +206,9 @@ public class PreLobby extends AppCompatActivity {
         ClientSocket.off("updatePlayersList");
     }
 
+    /**
+     * Loads the icon for each player in the lobby.
+     */
     private void loadIcon(){
         for(Player player: playerList){
             if(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl() != null){
@@ -196,9 +223,11 @@ public class PreLobby extends AppCompatActivity {
         }
 
     }
+
+    /**
+     * Updates the player list in the RecyclerView.
+     */
     private void updateData(){
-
-
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
@@ -207,6 +236,9 @@ public class PreLobby extends AppCompatActivity {
         });
     }
 
+    /**
+     * Sends a request to start the game to the server.
+     */
     private void startGame() {
         JSONObject jsonObject = new JSONObject();
 
@@ -218,6 +250,5 @@ public class PreLobby extends AppCompatActivity {
         }
         ClientSocket.emit("startGame", jsonObject);
     }
-
 
 }

@@ -33,30 +33,37 @@ import com.api.projet.inter.AnimeCallBackInterface;
 import com.api.projet.itemDecoration.SpaceItemDecoration;
 import com.squareup.picasso.Picasso;
 
+/**
+ * Cette classe représente l'activité détaillée d'un anime dans l'application.
+ * Elle affiche les informations détaillées sur un anime donné.
+ */
 public class AnimeDetailActivity extends AppCompatActivity implements AnimeCallBackInterface {
-    private String client_id;
-    private String URL;
-    private HttpURLConnection httpURLConnection;
-    private AnimeDetailed animeDetailed;
+    private String client_id; // ID du client pour l'API
+    private String URL; // URL de l'API
+    private HttpURLConnection httpURLConnection; // Connexion HTTP
+    private AnimeDetailed animeDetailed; // Détails de l'anime
 
-    private RecyclerView recyclerView;
-    private AdapterAnimeImg adapter;
-
-    private TextView animeTitle;
-    private TextView animeTitleJp;
-    private TextView description;
-    private TextView dateDebut;
-    private TextView dateFin;
-    private TextView noteMoy;
-    private TextView rank;
-    private TextView popularity;
-    private TextView genres;
-    private TextView status;
-    private TextView ep;
-
-    private ImageView imgAnime;
+    private RecyclerView recyclerView; // RecyclerView pour les images de l'anime
+    private AdapterAnimeImg adapter; // Adaptateur pour les images de l'anime
+    private TextView animeTitle; // Titre de l'anime
+    private TextView animeTitleJp; // Titre japonais de l'anime
+    private TextView description; // Description de l'anime
+    private TextView dateDebut; // Date de début de l'anime
+    private TextView dateFin; // Date de fin de l'anime
+    private TextView noteMoy; // Note moyenne de l'anime
+    private TextView rank; // Classement de l'anime
+    private TextView popularity; // Popularité de l'anime
+    private TextView genres; // Genres de l'anime
+    private TextView status; // Statut de l'anime
+    private TextView ep; // Nombre d'épisodes de l'anime
+    private ImageView imgAnime; // Image de l'anime
 
 
+    /**
+     * Méthode appelée à la création de l'activité.
+     * Elle initialise les composants de l'interface utilisateur et charge les informations de l'anime.
+     * @param savedInstanceState État de l'activité enregistré précédemment
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +84,9 @@ public class AnimeDetailActivity extends AppCompatActivity implements AnimeCallB
         loadInfoAnime(animeId);
     }
 
+    /**
+     * Initialise les composants de l'interface utilisateur.
+     */
     private void initcomponents(){
         recyclerView = findViewById(R.id.recyclerViewAnimeDetailed);
 
@@ -109,6 +119,9 @@ public class AnimeDetailActivity extends AppCompatActivity implements AnimeCallB
 
     }
 
+    /**
+     * Affiche les données de l'anime dans l'interface utilisateur.
+     */
     private void showData(){
         adapter.setListeURL(animeDetailed.getPictures());
         adapter.notifyDataSetChanged();
@@ -133,6 +146,10 @@ public class AnimeDetailActivity extends AppCompatActivity implements AnimeCallB
     }
 
 
+    /**
+     * Charge les informations de l'anime depuis l'API.
+     * @param animeId ID de l'anime à charger
+     */
     private void loadInfoAnime(int animeId) {
         AsyncTask<Void, Void, AnimeDetailed> apiTask = new AsyncTask<Void, Void, AnimeDetailed>(){
             @Override
@@ -217,6 +234,10 @@ public class AnimeDetailActivity extends AppCompatActivity implements AnimeCallB
     }
 
 
+    /**
+     * Méthode appelée en cas de succès lors du chargement des informations de l'anime.
+     * @param anime Détails de l'anime chargés avec succès
+     */
     @Override
     public void onSuccess(AnimeDetailed anime) {
 

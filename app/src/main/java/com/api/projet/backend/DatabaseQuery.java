@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 
 import com.api.projet.entity.Lobby;
 import com.api.projet.entity.Player;
-import com.api.projet.entity.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -21,22 +20,39 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * La classe DatabaseQuery permet d'effectuer des requêtes vers la base de données Firestore.
+ */
 public class DatabaseQuery {
 
+    /** Instance unique de DatabaseQuery (Singleton) */
     private static DatabaseQuery instance;
+    /** Connexion à la base de données Firestore */
     private DatabaseConnexion databaseConnexion;
-
+    /** Instance de FirebaseFirestore pour accéder à la base de données Firestore */
     private FirebaseFirestore db;
 
+    /** Variable indiquant si une opération a réussi ou non */
     private boolean isSuccess = false;
 
+    /** Liste des lobbys récupérés depuis la base de données */
     private List<Lobby> lobbyList;
+
+    /**
+     * Constructeur privé de la classe DatabaseQuery.
+     * Initialise l'instance de DatabaseConnexion pour la connexion à la base de données Firestore.
+     */
     private DatabaseQuery(){
         this.databaseConnexion = DatabaseConnexion.getInstance();
         this.db = databaseConnexion.getConnexionDatabase();
         this.lobbyList = new ArrayList<>();
     }
 
+    /**
+     * Ajoute un lobby à la base de données.
+     * @param lobby Le lobby à ajouter.
+     * @return true si l'opération a réussi, false sinon.
+     */
     public boolean addLobby(Map<Integer, Lobby> lobby){
         this.db.collection("lobby")
                 .add(lobby)
@@ -57,6 +73,10 @@ public class DatabaseQuery {
         return isSuccess;
     }
 
+    /**
+     * Récupère la liste des lobbys depuis la base de données Firestore.
+     * @return Une tâche contenant la liste des lobbys.
+     */
     public Task<List<Lobby>> getLobby() {
         TaskCompletionSource<List<Lobby>> taskCompletionSource = new TaskCompletionSource<>();
         db.collection("lobby")
@@ -78,6 +98,12 @@ public class DatabaseQuery {
                 });
         return taskCompletionSource.getTask();
     }
+
+    /**
+     * Récupère la liste des joueurs pour un lobby spécifique depuis la base de données Firestore.
+     * @param lobbyId L'identifiant du lobby.
+     * @return Une tâche contenant la liste des joueurs pour le lobby spécifié.
+     */
     public Task<List<Player>> getPlayers(String lobbyId) {
         TaskCompletionSource<List<Player>> taskCompletionSource = new TaskCompletionSource<>();
 
@@ -116,7 +142,11 @@ public class DatabaseQuery {
         return taskCompletionSource.getTask();
     }
 
-
+    /**
+     * Recherche et récupère l'hôte d'un lobby à partir de son identifiant.
+     * @param lobbyId L'identifiant du lobby.
+     * @return Une tâche contenant le joueur hôte du lobby.
+     */
     public Task<Player> foundHostLobbyById(String lobbyId) {
         TaskCompletionSource<Player> taskCompletionSource = new TaskCompletionSource<>();
 
@@ -144,13 +174,15 @@ public class DatabaseQuery {
         return taskCompletionSource.getTask();
     }
 
-
-
+    /**
+     * Retourne l'instance unique de DatabaseQuery (Singleton).
+     * Si l'instance n'existe pas, elle est créée.
+     * @return L'instance de DatabaseQuery.
+     */
     public static DatabaseQuery getInstance(){
         if(instance == null){
             instance = new DatabaseQuery();
         }
         return instance;
     }
-
 }

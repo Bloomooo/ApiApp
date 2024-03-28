@@ -18,9 +18,20 @@ import com.api.projet.inter.AnimeListObserver;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * ViewModel class for managing the data of the MyListAnimeFragment.
+ */
 public class MyListAnimeViewModel extends ViewModel implements AnimeListObserver {
+    /** LiveData object representing the list of anime. */
     private MutableLiveData<List<Anime>> animeList;
+
+    /** Base list of anime. */
     private List<Anime> animeListBase;
+
+    /**
+     * Constructor for MyListAnimeViewModel.
+     * Initializes the LiveData and base list of anime.
+     */
     public MyListAnimeViewModel(){
         animeList = new MutableLiveData<>();
         animeListBase = new ArrayList<>();
@@ -32,18 +43,28 @@ public class MyListAnimeViewModel extends ViewModel implements AnimeListObserver
         }
     }
 
-
-
+    /**
+     * Retrieves the LiveData object representing the list of anime.
+     * @return LiveData object representing the list of anime.
+     */
     public LiveData<List<Anime>> getAnimeList() {
         return animeList;
     }
 
+    /**
+     * Method called when the list of anime is updated.
+     * @param newAnimeList The updated list of anime.
+     */
     @Override
     public void onAnimeListUpdated(List<Anime> newAnimeList) {
         animeList.setValue(newAnimeList);
         animeListBase = new ArrayList<>(newAnimeList);
     }
 
+    /**
+     * Filters the anime list based on the provided filter.
+     * @param filter The filter string.
+     */
     public void newFilterAnimeList(String filter){
         List<Anime> list = new ArrayList<>();
         for(Anime a : animeListBase){
@@ -54,6 +75,11 @@ public class MyListAnimeViewModel extends ViewModel implements AnimeListObserver
         animeList.setValue(list);
     }
 
+    /**
+     * Handles the action to be performed when an item in the RecyclerView is clicked.
+     * @param rv The RecyclerView instance.
+     * @param e The MotionEvent object representing the touch event.
+     */
     public void itemAction(@NonNull RecyclerView rv, @NonNull MotionEvent e){
         int position = rv.getChildAdapterPosition(rv.findChildViewUnder(e.getX(), e.getY()));
         Anime animeClicked = animeList.getValue().get(position);
@@ -62,9 +88,5 @@ public class MyListAnimeViewModel extends ViewModel implements AnimeListObserver
         intent.putExtra("id",animeClicked.getId());
 
         rv.getContext().startActivity(intent);
-
-
-
     }
-
 }

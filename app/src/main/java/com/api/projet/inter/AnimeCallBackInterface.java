@@ -4,6 +4,13 @@ import com.api.projet.entity.AnimeDetailed;
 
 import java.util.List;
 
+/**
+ * Interface pour la gestion des rappels (callbacks) des requêtes Anime.
+ */
 public interface AnimeCallBackInterface {
-    public void onSuccess(AnimeDetailed anime);
+    /**
+     * Méthode appelée lorsque la requête Anime est réussie.
+     * @param anime L'objet Anime détaillé retourné par la requête.
+     */
+    void onSuccess(AnimeDetailed anime);
 }

@@ -40,14 +40,24 @@ import java.util.List;
 
 import io.socket.emitter.Emitter;
 
+/**
+ * Fragment for managing the home screen.
+ */
 public class HomeFragment extends Fragment implements IntentInterface {
 
+    /** View binding for the fragment. */
     private FragmentHomeBinding binding;
+
+    /** RecyclerView for displaying lobbies. */
     private RecyclerView recyclerView;
+
+    /** Adapter for the RecyclerView. */
     private LobbyAdapter adapterRecycleView;
 
+    /** Button for creating a lobby. */
     private Button createLobbyButton;
 
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -69,6 +79,10 @@ public class HomeFragment extends Fragment implements IntentInterface {
         binding = null;
     }
 
+    /**
+     * Initializes the components of the fragment.
+     * @param root The root view of the fragment.
+     */
     private void initComponent(View root) {
         this.recyclerView = root.findViewById(R.id.recyclerViewLobby);
         createLobbyButton = root.findViewById(R.id.createLobby);
@@ -77,6 +91,9 @@ public class HomeFragment extends Fragment implements IntentInterface {
         recyclerView.setAdapter(adapterRecycleView);
     }
 
+    /**
+     * Initializes the click listener for the create lobby button.
+     */
     private void initListener(){
         createLobbyButton.setOnClickListener(v->{
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -112,9 +129,13 @@ public class HomeFragment extends Fragment implements IntentInterface {
             AlertDialog dialog = builder.create();
             dialog.show();
         });
-
     }
 
+    /**
+     * Creates a lobby and emits the data to the server.
+     * @param name The name of the lobby.
+     * @param nb The number of players in the lobby.
+     */
     private void createLobby(String name, String nb){
         JSONObject lobbyDetails = new JSONObject();
         JSONArray animeJsonArray = new JSONArray();
@@ -133,9 +154,12 @@ public class HomeFragment extends Fragment implements IntentInterface {
         }
 
         ClientSocket.emit("createLobby", lobbyDetails);
-
     }
 
+    /**
+     * Sets up LiveData observers for the HomeViewModel.
+     * @param homeViewModel The HomeViewModel instance.
+     */
     private void setupLiveDataObservers(HomeViewModel homeViewModel) {
         homeViewModel.getLobby().observe(getViewLifecycleOwner(), new Observer<List<Lobby>>() {
             @Override
@@ -152,6 +176,11 @@ public class HomeFragment extends Fragment implements IntentInterface {
         intent.putExtra("lobbyId", lobbyId);
         startActivity(intent);
     }
+
+    /**
+     * Sends a request to join a lobby to the server.
+     * @param lobbyId The ID of the lobby to join.
+     */
     private void joinLobby(String lobbyId){
         JSONObject jsonObject = new JSONObject();
         JSONArray animeJsonArray = new JSONArray();
@@ -169,6 +198,7 @@ public class HomeFragment extends Fragment implements IntentInterface {
         }
         ClientSocket.emit("joinLobby", jsonObject);
     }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -179,7 +209,6 @@ public class HomeFragment extends Fragment implements IntentInterface {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
                         Lobby lobby = null;
                         try {
                             lobby = new Lobby(data.getString("lobbyId"), data.getString("name"), data.getString("username"));
@@ -214,7 +243,6 @@ public class HomeFragment extends Fragment implements IntentInterface {
             }
         });
     }
-
 
     @Override
     public void onStop() {
