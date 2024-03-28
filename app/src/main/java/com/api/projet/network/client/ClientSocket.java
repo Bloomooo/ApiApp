@@ -19,8 +19,8 @@ public class ClientSocket {
 
     private static Socket mSocket;
 
-    public static void connectToServer(User player) {
-        new ConnectTask(player).execute();
+    public static void connectToServer(User user) {
+        new ConnectTask(user).execute();
     }
 
     private static class ConnectTask extends AsyncTask<Void, Void, Void> {
@@ -48,14 +48,14 @@ public class ClientSocket {
                 mSocket.connect();
                 Log.d("ClientSocket", "Tentative de connexion au serveur...");
                 if (user != null) {
-                    JSONObject playerInfo = new JSONObject();
+                    JSONObject userInfo = new JSONObject();
                     try {
-                        playerInfo.put("name", user.getName());
+                        userInfo.put("name", user.getName());
 
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
-                    mSocket.emit("registerUser", playerInfo);
+                    mSocket.emit("registerUser", userInfo);
                 }
             }
         }

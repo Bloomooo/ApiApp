@@ -30,7 +30,7 @@
                 android:layout_height="100dp"
                 android:contentDescription="@string/nav_header_desc"
                 android:scaleType="centerCrop"
-                android:src="@drawable/mafuyu" />
+                android:src="@drawable/ic_menu_profil" />
         </androidx.cardview.widget.CardView>
 
         <TextView
