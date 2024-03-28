@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.api.projet.AnimeListData;
+import com.api.projet.model.AnimeListData;
 import com.api.projet.R;
 import com.api.projet.adapter.PreLobbyAdapter;
 import com.api.projet.backend.DatabaseQuery;
